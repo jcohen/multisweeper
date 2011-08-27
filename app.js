@@ -61,12 +61,12 @@ io.sockets.on("connection", function (socket) {
 
   socket.on("register", function(data) {
       players.push(data);
-      socket.emit("newPlayer", data);
+      io.sockets.emit("newPlayer", data);
   });
 
   socket.on("turn", function (data) {
     console.log(data);
-    socket.emit("moveMade", data);
+    io.sockets.emit("moveMade", data);
   });
 });
 

@@ -1,6 +1,6 @@
 (function(multisweeper, $) {
     var Game = multisweeper.Game = function(playerName) {
-        this.playerName = playerName || "Player 1"; // TODO: get current player count from node
+        this.playerName = playerName || "Player " + Math.ceil(1 + Math.random() * (100 - 0)); // TODO: get current player count from node
     };
 
     var util = new multisweeper.Utils();
