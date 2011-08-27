@@ -94,6 +94,7 @@ module.exports = function(app) {
                     data['board']= JSON.stringify(mine.state());
                     console.log("broadcasting new game state");
                     socket.emit("move-made", data);
+                    socket.broadcast.to(game.id).emit("move-made", data);
                 });
             });
 
