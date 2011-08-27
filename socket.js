@@ -44,7 +44,8 @@ module.exports = function(app) {
                     console.log("broadcasting new game state");
 
                     data.board = updatedGame.board.state();
-
+                    data.players = updatedGame.players;
+                    
                     socket.emit("move-made", data);
                     socket.broadcast.to(game.id).emit("move-made", data);
 
