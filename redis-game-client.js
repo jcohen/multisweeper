@@ -14,7 +14,7 @@ var DEFAULT_LOCK_EXPIRATION = 100; // 100 ms
 var LOCK_ACQUISITION_INTERVAL = 1; // 1 ms
 var LOCK_ACQUISITION_TIMEOUT = 200; // 200 ms
 
-var MAX_PLAYERS = 8;
+var MAX_PLAYERS = 7;
 
 function lockKeyForIdentifier(identifier) {
     if (typeof identifier === "object") {
@@ -140,18 +140,28 @@ RedisGameClient.prototype.createGame = function(callback) {
     this.updateGame(game, callback);
 };
 
-RedisGameClient.prototype.updateGame = function(game, callback) {
+RedisGameClient.prototype.updateGame = function(game, callback, skipLock) {
     console.log("Updating game: %j", game);
 
     var that = this;
-    this.acquireLock(game, function(err, lock) {
-        if (err || !lock.acquired) {
-            console.log("Could not acquire lock");
-            return callback(err || lock, null);
-        }
+    if (!skipLock) {
+        this.acquireLock(game, function(err, lock) {
+            if (err || !lock.acquired) {
+                console.log("Could not acquire lock");
+                return callback(err || lock, null);
+            }
 
+            performUpdate();
+        });
+    } else {
+        performUpdate();
+    }
+
+    function performUpdate() {
         client.hset(GAMES_KEY, game.gameId, JSON.stringify(game), function(err, data) {
-            that.releaseLock(game);
+            if (!skipLock) {
+                that.releaseLock(game);
+            }
 
             if (err) {
                 return callback(err, null);
@@ -159,7 +169,7 @@ RedisGameClient.prototype.updateGame = function(game, callback) {
 
             return callback(null, game);
         });
-    });
+    }
 };
 
 RedisGameClient.prototype.endGame = function(game, callback) {
@@ -187,7 +197,7 @@ RedisGameClient.prototype.getGame = function(gameId, callback) {
         if (err) {
             return callback(err, null);
         }
-        try {
+        // try {
             if (!data) {
                 console.error("Game doesn't exist: %s", gameId);
                 return callback(new Error(), null);
@@ -195,10 +205,10 @@ RedisGameClient.prototype.getGame = function(gameId, callback) {
             var game = JSON.parse(data);
             game.board = new MineSweeper(game.board);
             return callback(null, game);
-        } catch (e) {
-            console.error("Failed to parse data for game: %s (%s). Exception is: %s", gameId, data, e);
-            callback(new Error(), null);
-        }
+        // } catch (e) {
+        //     console.error("Failed to parse data for game: %s (%s). Exception is: %s", gameId, data, e);
+        //     callback(new Error(), null);
+        // }
     });
 };
 
@@ -208,6 +218,61 @@ RedisGameClient.prototype.getGames = function(callback) {
     // });
 };
 
+RedisGameClient.prototype.addPlayerToGame = function(game, playerName, callback) {
+    var that = this;
+    this.acquireLock(game, function(err, lock) {
+        if (err || !lock.acquired) {
+            console.log("Could not acquire lock for available game id...");
+            return callback(err || lock, null);
+        }
+
+        that.getGame(game.gameId, function(err, latestGame) {
+            if (err) {
+                that.releaseLock(game);
+                return callback(err, null);
+            }
+
+            var colors = [ "blue", "green", "orange", "pink", "purple", "red", "yellow" ];
+
+            function randomColor() {
+                return colors[Math.floor(Math.random() * colors.length)]
+            }
+
+            var color = randomColor();
+
+            for (var i = 0, l = latestGame.players.length; i < l; i++) {
+                var player = latestGame.players[i];
+
+                if (player.playerName === playerName) {
+                    that.releaseLock(game);
+                    return callback({ "error" : "NAME_IN_USE" }, null);
+                }
+
+                while (player.color === color) {
+                    colors.splice(colors.indexOf(color), 1);
+                    color = randomColor();
+                }
+            }
+
+            var player = { "playerName" : playerName, "color" : color, "score" : 0 };
+            latestGame.players.push(player);
+
+            console.log("Players after push: %j", latestGame.players);
+
+            that.updateGame(latestGame, function(err, updatedGame) {
+                that.releaseLock(game);
+
+                if (err) {
+                    return callback(err, null);
+                }
+
+                return callback(null, { "game" : updatedGame, "player" : player });
+            }, true); // we're already locked, so tell update to skip acquiring
+
+        });
+    });
+};
+
 RedisGameClient.prototype.getAvailableGame = function(callback) {
     console.log("Getting available game...");
     var that = this;
@@ -215,10 +280,7 @@ RedisGameClient.prototype.getAvailableGame = function(callback) {
     this.acquireLock(FILLING_GAME_ID_KEY, function(err, lock) {
         if (err || !lock.acquired) {
             console.log("Could not acquire lock for available game id...");
-            if (!err) {
-                err = lock;
-            }
-            return callback(err, null);
+            return callback(err || lock, null);
         }
 
         client.hget(GAMES_KEY, FILLING_GAME_ID_KEY, function(err, gameId) {

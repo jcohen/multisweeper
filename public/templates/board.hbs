@@ -1,13 +1,10 @@
-<div class="players">
+<ul class="players">
 {{#players}}
-  <div class="player">
-    {{playerName}}
-    <div class="score">
-      {{score}}
-    </div>
-  </div>
+  <li class="player player-{{color}}">
+    <span class="name">{{playerName}}</span> <span class="score">{{score}}</span>
+  </li>
 {{/players}}
-</div>
+</ul>
 
 <div class="clear"></div>
 <div data-board-id="{{uuid}}" class="board">

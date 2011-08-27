@@ -52,7 +52,7 @@
     var loadedTemplates = {};
 
     var Templates = multisweeper.Templates = function() {
-
+        this.preloaded = false;
     };
 
     Templates.prototype.get = function(templateName, callback) {
@@ -72,6 +72,8 @@
     };
 
     Templates.prototype.preload = function() {
+        if (this.preloaded) { return; }
+
         var templates = [ "board" ];
 
         for (var i = 0, l = templates.length; i < l; i++) {
@@ -79,5 +81,7 @@
 
             this.get(template, function() {});
         }
+
+        this.preloaded = true;
     };
 })(window.multisweeper = window.multisweeper || {}, jQuery);

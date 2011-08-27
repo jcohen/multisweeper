@@ -1,0 +1,507 @@
+<html><head>
+    <title>Multisweeper</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <link href="/stylesheets/multisweeper.css" media="screen" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+  <script src="/socket.io/socket.io.js"></script>
+
+<div id="main"><ul class="players">
+
+  <li class="player player-purple">
+    <span class="playerWrapper">
+      <span class="name">asd</span> <span class="score">39</span>
+    </span>
+  </li>
+
+  <li class="player player-green">
+    <span class="name">asdasd</span> <span class="score">0</span>
+  </li>
+
+  <li class="player player-pink">
+    <span class="name">asdasdas</span> <span class="score">0</span>
+  </li>
+
+  <li class="player player-orange">
+    <span class="name">asdasdsa</span> <span class="score">0</span>
+  </li>
+
+  <li class="player player-blue">
+    <span class="name">qwewqewq</span> <span class="score">0</span>
+  </li>
+
+  <li class="player player-yellow">
+    <span class="name">jgjhgj</span> <span class="score">0</span>
+  </li>
+
+  <li class="player player-purple">
+    <span class="name">cvcvbcvbvc</span> <span class="score">0</span>
+  </li>
+
+</ul>
+
+<div class="clear"></div>
+<div data-board-id="86bd54a4-57fd-4319-8e53-5eb1b12931ae" class="board">
+
+  <div data-row-id="0" class="row">
+
+    <div data-col-id="0" class="cell  left revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="1" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="2" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="3" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="4" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="5" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="6" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="7" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="8" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="9" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+  </div>
+
+  <div data-row-id="1" class="row">
+
+    <div data-col-id="0" class="cell  left unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="1" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="2" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="3" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="4" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="5" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="6" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="7" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="8" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="9" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+  </div>
+
+  <div data-row-id="2" class="row">
+
+    <div data-col-id="0" class="cell  left unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="1" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="2" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="3" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="4" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="5" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="6" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="7" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="8" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="9" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+  </div>
+
+  <div data-row-id="3" class="row">
+
+    <div data-col-id="0" class="cell  left unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="1" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="2" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="3" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="4" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="5" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="6" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="7" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="8" class="cell  revealed nearby2">
+      <span>2</span>&nbsp;
+    </div>
+
+    <div data-col-id="9" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+  </div>
+
+  <div data-row-id="4" class="row">
+
+    <div data-col-id="0" class="cell  left unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="1" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="2" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="3" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="4" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="5" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="6" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="7" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="8" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="9" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+  </div>
+
+  <div data-row-id="5" class="row">
+
+    <div data-col-id="0" class="cell  left unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="1" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="2" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="3" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="4" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="5" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="6" class="cell  revealed nearby3">
+      <span>3</span>&nbsp;
+    </div>
+
+    <div data-col-id="7" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="8" class="cell  revealed nearby2">
+      <span>2</span>&nbsp;
+    </div>
+
+    <div data-col-id="9" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+  </div>
+
+  <div data-row-id="6" class="row">
+
+    <div data-col-id="0" class="cell  left unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="1" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="2" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="3" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="4" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="5" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="6" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="7" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="8" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="9" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+  </div>
+
+  <div data-row-id="7" class="row">
+
+    <div data-col-id="0" class="cell  left unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="1" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="2" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="3" class="cell  revealed nearby3">
+      <span>3</span>&nbsp;
+    </div>
+
+    <div data-col-id="4" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="5" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="6" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="7" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="8" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="9" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+  </div>
+
+  <div data-row-id="8" class="row">
+
+    <div data-col-id="0" class="cell  left unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="1" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="2" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="3" class="cell  revealed nearby2">
+      <span>2</span>&nbsp;
+    </div>
+
+    <div data-col-id="4" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="5" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="6" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="7" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="8" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="9" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+  </div>
+
+  <div data-row-id="9" class="row">
+
+    <div data-col-id="0" class="cell  left unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="1" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="2" class="cell  unknown">
+      <span>.</span>&nbsp;
+    </div>
+
+    <div data-col-id="3" class="cell  revealed nearby1">
+      <span>1</span>&nbsp;
+    </div>
+
+    <div data-col-id="4" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="5" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="6" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="7" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="8" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+    <div data-col-id="9" class="cell  revealed nearby0">
+      <span>0</span>&nbsp;
+    </div>
+
+  </div>
+
+</div>
+
+<div class="clear"></div>
+
+<div class="overlay hidden"></div>
+<div class="gameover hidden"></div>
+<br>
+
+(Note: Shift-click to set/clear a flag)
+
+<br></div>
+
+<div id="log"><b>[1314487636083]</b> Game state is: {"gameId":"86bd54a4-57fd-4319-8e53-5eb1b12931ae","players":[{"playerName":"asd","color":"purple","score":39},{"playerName":"asdasd","color":"green","score":0},{"playerName":"asdasdas","color":"pink","score":0},{"playerName":"asdasdsa","color":"orange","score":0},{"playerName":"qwewqewq","color":"blue","score":0},{"playerName":"jgjhgj","color":"yellow","score":0},{"playerName":"cvcvbcvbvc","color":"purple","score":0}],"player":{"playerName":"cvcvbcvbvc","color":"purple","score":0},"board":[{"line":[1,1,1,".",".",".",".",".",".",1]},{"line":[".",".",".",".",".",".",".",".",".","."]},{"line":[".",".",".",".",".",".",".",".",".","."]},{"line":[".",".",".",".",".",".",".",".",2,1]},{"line":[".",".",".",".",".",".",".",".",1,0]},{"line":[".",".",".",".",1,1,3,".",2,0]},{"line":[".",".",".",".",1,0,1,".",1,0]},{"line":[".",".",".",3,1,0,1,1,1,0]},{"line":[".",".",".",2,0,0,0,0,0,0]},{"line":[".",".",".",1,0,0,0,0,0,0]}]}<br><b>[1314487636081]</b> Got game assignment: <b>86bd54a4-57fd-4319-8e53-5eb1b12931ae</b><br>
+</div>
+
+<script src="/js/utils.js"></script>
+<script src="/js/game.js"></script>
+<script src="/js/handlebars.1.0.0.beta.3.js"></script>
+<script src="/js/templates.js"></script>
+<script src="/js/multisweeper.js"></script>
+
+</body></html>

@@ -19,10 +19,11 @@
             that.gameId = data.gameId;
             that.state = data.board;
             that.players = data.players;
-            
+            that.player = data.player;
+
             that.socket.on("new-player", playerJoined);
             that.socket.on("mine-hit", function(data) {
-                util.log("<b>" + data.playerName + "</b> hit a bomb! at " + data.x + "," + data.y); 
+                util.log("<b>" + data.playerName + "</b> hit a bomb! at " + data.x + "," + data.y);
             });
             that.socket.on("end-game", function(data) {
                util.log("<b>" + data.playerName + "</b> finished the board!");
@@ -44,7 +45,7 @@
     Game.prototype.takeTurn = function(board, x, y) {
         this.socket.emit("turn", { "game" : this.gameId, "playerName" : this.playerName, "time" : new Date().getTime(), "x": x, "y": y });
     };
-    
+
     Game.prototype.flag = function(board, x, y) {
         this.socket.emit("flag", { "game" : this.gameId, "playerName" : this.playerName, "time" : new Date().getTime(), "x": x, "y": y });
     }
@@ -56,7 +57,7 @@
             $("#main").empty().html(template({uuid: data.gameId, board: data.board, players: data.players}));
         })
     };
-    
+
     function finishGame(data) {
         var templates = new multisweeper.Templates();
         templates.preload();
@@ -67,12 +68,12 @@
         $(".overlay").show();
         $(".gameover").show();
     }
-    
+
     function playerJoined(data) {
         util.log("<b>" + data.player.playerName + "</b> joined the game!");
         refresh(data);
     }
-    
+
     function byScore(a, b) {
         return b.score - a.score;
     }

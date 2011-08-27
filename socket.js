@@ -9,17 +9,26 @@ module.exports = function(app) {
     var gameClient = new RedisGameClient();
 
     io.sockets.on("connection", function (socket) {
-        socket.on("join", function(player) {
-            player['score'] = 0;
-            // TODO: ensure player name is unique to game
+        socket.on("join", function(playerData) {
             gameClient.getAvailableGame(function(err, game) {
-                game.players.push(player);
-                gameClient.updateGame(game, function(err, updatedGame) {
+                gameClient.addPlayerToGame(game, playerData.playerName, function(err, data) {
+                    if (err) {
+                        if (err.error === "NAME_IN_USE") {
+                            // TODO: message name in use to user
+                        }
+
+                        return callback();
+                    }
+
+                    var updatedGame = data.game;
+                    var player = data.player;
+
                     socket.join(updatedGame.id);
 
                     socket.emit("game-assignment", {
                         "gameId" : updatedGame.gameId,
                         "players" : updatedGame.players,
+                        "player" : player,
                         "board": updatedGame.board.state()
                     });
 
@@ -45,7 +54,7 @@ module.exports = function(app) {
 
                     data.board = updatedGame.board.state();
                     data.players = updatedGame.players;
-                    
+
                     socket.emit("move-made", data);
                     socket.broadcast.to(game.id).emit("move-made", data);
 
