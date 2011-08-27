@@ -38,7 +38,7 @@
                 break;
             default :
                 if (typeof cellContent.item === "number") {
-                    css += " revealed";
+                    css += " revealed nearby" + cellContent.item;
                 }
                 break;
         }

@@ -2,6 +2,7 @@
     margin-bottom: 20px;
     min-height: 30px;
 }
+
 .player {
     float: left;
     font-size: 16px;
@@ -14,36 +15,89 @@
 }
 
 .board {
-  width: 180px;
-  height: 200px;
-  border: 1px solid;
+    width: 170px;
+    height: 190px;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    margin-bottom: 10px;
 }
 
 .row {
-  height: 16px;
+    height: 16px;
 }
 
 .cell {
-  width: 16px;
-  text-align: center;
-  float: left;
-  background: #ccc;
-  border-left: 1px solid;
-  border-top: 1px solid;
-  padding-right: 1px;
-  padding-bottom: 1px;
-}
-
-.left {
-    border-left: 0px;
+    width: 16px;
+    float: left;
+    background: #ccc;
+    border-left: 1px solid;
+    border-top: 1px solid;
+    text-align: center;
+    cursor: pointer;
 }
 
 .unknown {
+    border-left: 1px outset;
+    border-top: 1px outset;
+}
 
+.unknown span {
+    display: none;
+}
+
+.unknown:hover {
+    border-left: 1px inset;
+    border-top: 1px inset;
 }
 
 .revealed {
+    font-family: helvetica;
+    font-weight: bold;
+    cursor: auto;
+}
 
+.revealed span {
+    padding-left: 4px;
+}
+
+.flag {
+    background: transparent url(/images/flag_blue.png) no-repeat 1px 1px;
+}
+
+.flag span {
+    display: none;
+}
+
+.nearby0 span {
+    display: none;
+}
+
+.nearby1 span {
+    color: blue;
+}
+
+.nearby2 span {
+    color: green;
+}
+
+.nearby3 span {
+    color: #a00000;
+}
+
+.nearby4 span {
+    color: #b10000;
+}
+
+.nearby5 span {
+    color: #c20000;
+}
+
+.nearby6 span {
+    color: #d40000;
+}
+
+.nearby7 span {
+    color: #e50000;
 }
 
 .overlay {
