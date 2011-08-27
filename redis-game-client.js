@@ -72,8 +72,11 @@ RedisGameClient.prototype.getGame = function(gameId, callback) {
         if (err) {
             return callback(err, null);
         }
-
         try {
+            if (!data) {
+                console.error("Game doesn't exist: %s", gameId);
+                return callback(new Error(), null);
+            };
             var game = JSON.parse(data);
             game.board = new MineSweeper(game.board);
             return callback(null, game);

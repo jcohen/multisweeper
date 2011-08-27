@@ -29,6 +29,9 @@ module.exports = function(app) {
 
         socket.on("turn", function handleTurn(data) {
             gameClient.getGame(data.game, function(err, game) {
+                if (err) {
+                    return;
+                }
                 game.board.display();
                 var outcome = game.board.revealTile(data.x,data.y);
                 console.log("Outcome: %s", outcome);
