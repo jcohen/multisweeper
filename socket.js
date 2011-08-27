@@ -18,7 +18,7 @@ module.exports = function(app) {
             var mine;
             for (game in games) {
                 console.log("GAME %j", game);
-                gameId = game["id"];
+                gameId = game;
             }
             if (gameId === undefined) {
                 console.log("Spinning up a new game...");
@@ -28,6 +28,29 @@ module.exports = function(app) {
                     if (err) {
                         console.log("Error saving new game %s", mine.uuid);
                     }
+                    socket.join(game.id);
+                    socket.emit("game-assignment", {
+                        "gameId" : game.id,
+                        "players" : game.players,
+                        "board": JSON.stringify(mine.state())
+                    });
+
+                    socket.broadcast.to(game.id).emit("new-player", data);
+                });
+            } else {
+                client.get(game.id, function(err, replies) {
+                    if (err) {
+                        console.log("Error fetching board:" + data.id);
+                    }
+                    mine = new MineSweeper(replies);
+                    socket.join(game.id);
+                    socket.emit("game-assignment", {
+                        "gameId" : game.id,
+                        "players" : game.players,
+                        "board": JSON.stringify(mine.state())
+                    });
+
+                    socket.broadcast.to(game.id).emit("new-player", data);
                 });
             }
 
@@ -42,15 +65,6 @@ module.exports = function(app) {
             game.players.push(data);
 
             console.log("players: ", game.players);
-
-            socket.join(game.id);
-            socket.emit("game-assignment", {
-                "gameId" : game.id,
-                "players" : game.players,
-                "board": JSON.stringify(mine.state())
-            });
-
-            socket.broadcast.to(game.id).emit("new-player", data);
         });
 
         socket.on("turn", function handleTurn(data) {
