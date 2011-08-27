@@ -9,7 +9,6 @@ client.on("error", function (err) {
 module.exports = function(app) {
     var io = require("socket.io").listen(app);
 
-
     var games = {};
 
     io.sockets.on("connection", function (socket) {

@@ -1,15 +1,36 @@
 .board {
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 200px;
+  border: 1px solid;
 }
+
 .row {
-  height: 10px;
+  height: 16px;
 }
+
 .cell {
-  width: 10px;
+  width: 16px;
   text-align: center;
   float: left;
+  background: #ccc;
+  border-left: 1px solid;
+  border-top: 1px solid;
+  padding-right: 1px;
+  padding-bottom: 1px;
 }
+
+.left {
+    border-left: 0px;
+}
+
+.unknown {
+
+}
+
+.revealed {
+
+}
+
 .clear {
     clear: both;
 }

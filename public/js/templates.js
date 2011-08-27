@@ -1,24 +1,49 @@
 (function(multisweeper, $) {
     Handlebars.registerHelper("index", function(array, fn, elseFn) {
-      if (array && array.length > 0) {
-        var buffer = "";
-        for (var i = 0, j = array.length; i < j; i++) {
-          var item = array[i];
-          if (typeof item === 'object') {
-            item.idx = i;
-            buffer += fn(item);
-          } else {
-            buffer += fn({"item": item, idx: i});
-          }
+        if (array && array.length > 0) {
+            var buffer = "";
+            for (var i = 0, j = array.length; i < j; i++) {
+                var item = array[i];
+                if (typeof item === 'object') {
+                    item.idx = i;
+                    buffer += fn(item);
+                } else {
+                    buffer += fn({"item": item, idx: i});
+                }
+            }
+
+            return buffer;
+        }
+        else {
+            return elseFn();
+        }
+    });
+
+    Handlebars.registerHelper("classForCell", function(cellContent) {
+        console.log("index: " + cellContent.idx);
+
+        var css = "";
+        if (cellContent.idx === 0) {
+            css += " left"
         }
 
-        return buffer;
-      }
-      else {
-        return elseFn();
-      }
+        switch (cellContent.item) {
+            case "." :
+                css += " unknown";
+                break;
+            case "F" :
+                css += " flag";
+                break;
+            default :
+                if (typeof cellContent.item === "number") {
+                    css += " revealed";
+                }
+                break;
+        }
+
+        return css;
     });
-    
+
     var loadedTemplates = {};
 
     var Templates = multisweeper.Templates = function() {

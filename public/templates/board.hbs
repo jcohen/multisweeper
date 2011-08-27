@@ -1,13 +1,15 @@
 <div data-board-id="{{uuid}}" class="board">
 {{#index board}}
-<div data-row-id="{{idx}}" class="row">
-{{#index line}}
-<div data-col-id="{{idx}}" class="cell">
-{{item}}
-</div>
+  <div data-row-id="{{idx}}" class="row">
+    {{#index line}}
+    <div data-col-id="{{idx}}" class="cell {{classForCell .}}">
+      {{item}}
+    </div>
+    {{/index}}
+  </div>
 {{/index}}
 </div>
-{{/index}}
-</div>
+
 <div class="clear"></div>
+
 <br/>
