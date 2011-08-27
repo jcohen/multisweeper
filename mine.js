@@ -7,10 +7,12 @@ var MineSweeper = exports.MineSweeper = function(state) {
     this.width = model.width;
     this.height = model.height;
     this.board = model.board;
+    this.revealed = model.revealed;
   } else {
     this.uuid = uuid();
     this.width = 10;
     this.height = 10;
+    this.revealed = 0;
     this.board = new Array(this.height);
     for (i=0;i<this.height;i++) {
       this.board[i] = new Array(this.width);
@@ -46,6 +48,7 @@ MineSweeper.prototype.revealTile = function(x,y) {
     }
     if (this.board[x][y] === MineSweeper.EMPTY) { //empty
       this.board[x][y] += MineSweeper.REVEAL_MODIFIER;
+      this.revealed += 1;
       for(var i=x-1; i<=x+1; i++) {
         for(var j=y-1; j<=y+1; j++) {
           if (i==x && y==j) {
@@ -60,6 +63,7 @@ MineSweeper.prototype.revealTile = function(x,y) {
     } else {
       if (this.board[x][y] < MineSweeper.REVEAL_MODIFIER) {
         this.board[x][y] += MineSweeper.REVEAL_MODIFIER;
+        this.revealed += 1;
       }
     }
     return true;
@@ -132,5 +136,6 @@ MineSweeper.prototype.display = function() {
       }
     }
     console.log(line + " -"+i+"- " + view);
+    console.log("Revealed:" + this.revealed);
   }
 }
