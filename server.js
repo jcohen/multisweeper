@@ -7,5 +7,14 @@ var app = http.createServer(function (req, res) {
     res.end('Hello, World');
 });
 
-app.listen(parseInt(process.env.PORT) || 7777);
-console.log('Listening on ' + app.address().port);
+
+app.listen(process.env.NODE_ENV === 'production' ? 80 : 8000, function() {
+  console.log('Ready');
+
+  // if run as root, downgrade to the owner of this file
+  if (process.getuid() === 0)
+    require('fs').stat(__filename, function(err, stats) {
+      if (err) return console.log(err)
+      process.setuid(stats.uid);
+    });
+});
