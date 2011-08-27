@@ -13,8 +13,6 @@ client.on("error", function (err) {
 
 var app = module.exports = express.createServer();
 
-var io = require("socket.io").listen(app);
-
 // Configuration
 
 app.configure(function(){
@@ -34,127 +32,10 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
-require('hbs').handlebars = require("handlebars");
+require('hbs').handlebars = Handlebars;
 
-// Routes
-
-app.get('/', function(req, res){
-  res.render('index', {
-    title: 'Multisweeper'
-  });
-});
-
-app.get('/board', function(req, res) {
-  var boardId = req.param('id');
-  if (boardId !== undefined) {
-    console.log("Request for board:" + boardId);
-    client.get(boardId, function(err, replies) {
-      if (err) {
-        console.log("Error fetching board:" + boardId);
-      }
-      var mine = new MineSweeper(replies);
-      mine.display();
-      var a = mine.random(10);
-      var b = mine.random(10);
-      console.log("New click on ["+a+","+b+"]")
-      mine.revealTile(a,b);
-      mine.display();
-      res.render('board', {
-        title: 'Board',
-        message: 'Simulated click on: ['+a+','+b+']',
-        board: mine.state(),
-        uuid: mine.uuid
-      });
-    });
-  } else {
-    var mine = new MineSweeper();
-    console.log("Clicking 5,5");
-    mine.revealTile(5,5);
-    mine.display();
-    client.set(mine.uuid, JSON.stringify(mine), function(err, replies) {
-      if (err) {
-        console.log("Error saving new")
-      }
-      console.log("Stored board:" + mine.uuid);
-      console.log(replies);
-
-      res.render('board', {
-        title: 'Board',
-        message: 'Assuming you clicked 5,5 on this newly generated board: <a href="/board?id=' + mine.uuid + '">' + mine.uuid + '</a>',
-        board: mine.state(),
-        uuid: mine.uuid
-      });
-    });
-  }
-});
-
-app.get("/game", function(req, res) {
-   res.render("game", {
-       "title" : "Multisweeper"
-   });
-});
-
-// Socket.io
-
-var games = {};
-
-io.sockets.on("connection", function (socket) {
-  socket.on("join", function(data) {
-      var gameId = "some-game-id"; // TODO: find a game waiting for more players or create a new one
-
-      var game = games[gameId];
-      if (!game) {
-          game = games[gameId] = {
-              "id" : gameId,
-              "players" : []
-          };
-      }
-
-      game.players.push(data);
-
-      console.log("players: ", game.players);
-
-      socket.join(game.id);
-      socket.emit("game-assignment", {
-          "gameId" : game.id,
-          "players" : game.players
-      });
-
-      socket.broadcast.to(game.id).emit("new-player", data);
-  });
-
-  socket.on("turn", function handleTurn(data) {
-      console.log("games: %j", games);
-      var game = games[data.game];
-
-      if (!game) {
-          console.log("Unknown game: %s", data.game);
-          // TODO: message to user
-          return;
-      }
-
-      console.log("handling turn in game %s with data: %j", game.id, data);
-
-      socket.broadcast.to(game.id).emit("move-made", data);
-  });
-  
-  socket.on("reveal", function(data) {
-    console.log(data);
-    client.get(data.id, function(err, replies) {
-      if (err) {
-        console.log("Error fetching board:" + data.id);
-      }
-      var mine = new MineSweeper(replies);
-      mine.revealTile(data.x,data.y);
-      client.set(mine.uuid, JSON.stringify(mine), function(err, replies) {
-        if (err) {
-          console.log("Error saving new")
-        }
-        io.sockets.emit("revealed", mine.state());
-      });
-    });
-  });
-});
+require("./routes")(app);
+require("./socket")(app);
 
 //WTB: each_with_index
 Handlebars.registerHelper("index", function(array, fn, elseFn) {
@@ -169,15 +50,13 @@ Handlebars.registerHelper("index", function(array, fn, elseFn) {
         buffer += fn({"item": item, idx: i});
       }
     }
- 
+
     return buffer;
   }
   else {
     return elseFn();
   }
 });
-
-
 
 // Listen
 
