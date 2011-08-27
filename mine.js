@@ -58,7 +58,9 @@ MineSweeper.prototype.revealTile = function(x,y) {
         }
       }
     } else {
-      this.board[x][y] += MineSweeper.REVEAL_MODIFIER;
+      if (this.board[x][y] < MineSweeper.REVEAL_MODIFIER) {
+        this.board[x][y] += MineSweeper.REVEAL_MODIFIER;
+      }
     }
     return true;
   }
