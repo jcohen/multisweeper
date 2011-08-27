@@ -1,10 +1,11 @@
 // server.js
-var http = require('http');
 var nko = require('nko')('+huZsg3PXM49A7mS');
 var MineSweeper = require('./mine').MineSweeper;
 var express = require('express');
 
 var app = module.exports = express.createServer();
+
+var io = require("socket.io").listen(app);
 
 // Configuration
 
@@ -29,7 +30,7 @@ app.configure('production', function(){
 
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Express'
+    title: 'Multisweeper'
   });
 });
 
@@ -40,6 +41,32 @@ app.get('/board', function(req, res) {
     title: 'Board'
   });
 });
+
+app.get("/game", function(req, res) {
+   res.render("game", {
+       "title" : "Multisweeper"
+   });
+});
+
+// Socket.io
+
+var players = [];
+
+io.sockets.on("connection", function (socket) {
+  socket.emit("connected", { "players" : players });
+
+  socket.on("register", function(data) {
+      players.push(data);
+      socket.emit("newPlayer", data);
+  });
+
+  socket.on("turn", function (data) {
+    console.log(data);
+    socket.emit("moveMade", data);
+  });
+});
+
+// Listen
 
 app.listen(process.env.NODE_ENV === 'production' ? 80 : 8000, function() {
   console.log('Ready');
