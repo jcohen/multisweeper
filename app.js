@@ -1,7 +1,7 @@
 // server.js
 var http = require('http');
 var nko = require('nko')('+huZsg3PXM49A7mS');
-
+var MineSweeper = require('./mine').MineSweeper;
 var express = require('express');
 
 var app = module.exports = express.createServer();
@@ -30,6 +30,14 @@ app.configure('production', function(){
 app.get('/', function(req, res){
   res.render('index', {
     title: 'Express'
+  });
+});
+
+app.get('/board', function(req, res) {
+  var mine = new MineSweeper();
+  mine.display();
+  res.render('index', {
+    title: 'Board'
   });
 });
 
