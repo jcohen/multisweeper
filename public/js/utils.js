@@ -4,6 +4,6 @@
     };
 
     Utils.prototype.log = function(message) {
-        $("#log").append("<b>[" + new Date().getTime() + "]</b> " + message + "<br />");
+        $("#log").prepend("<b>[" + new Date().getTime() + "]</b> " + message + "<br />");
     };
 })(window.multisweeper = window.multisweeper || {}, jQuery);
