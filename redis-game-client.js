@@ -47,6 +47,24 @@ RedisGameClient.prototype.updateGame = function(game, callback) {
     });
 };
 
+RedisGameClient.prototype.endGame = function(game, callback) {
+    console.log("Ending game with id: %s", game.board.uuid);
+    
+    client.hdel(GAMES_KEY, game.gameId, function(err, data) {
+        console.log(err);
+        console.log(data);
+       if (err) {
+           return callback(err);
+       }
+       client.hset(GAMES_KEY, FILLING_GAME_ID_KEY, '', function(err) {
+           if (err) {
+               return callback(err);
+           }
+           callback(null);
+       });
+    });
+}
+
 RedisGameClient.prototype.getGame = function(gameId, callback) {
     console.log("Retrieving game with id: %s", gameId);
 
@@ -79,7 +97,7 @@ RedisGameClient.prototype.getAvailableGame = function(callback) {
         if (err) {
             return callback(err, null);
         }
-
+        console.log(typeof gameId);
         console.log("Available game id is: %s", gameId);
 
         if (!gameId) {

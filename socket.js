@@ -30,17 +30,28 @@ module.exports = function(app) {
         socket.on("turn", function handleTurn(data) {
             gameClient.getGame(data.game, function(err, game) {
                 game.board.display();
-                game.board.revealTile(data.x,data.y);
-                game.board.display();
+                var outcome = game.board.revealTile(data.x,data.y);
+                console.log("Outcome: %s", outcome);
+                if (!outcome) {
+                    console.log("Hit a mine at %s,%s",data.x,data.y);
+                    gameClient.endGame(game, function(err) {
+                        socket.emit("end-game", data);
+                        socket.broadcast.to(game.id).emit("end-game", data);
+                        return;
+                    });
+                }
+                else {
+                    game.board.display();
 
-                gameClient.updateGame(game, function(err, updatedGame) {
-                    console.log("broadcasting new game state");
+                    gameClient.updateGame(game, function(err, updatedGame) {
+                        console.log("broadcasting new game state");
 
-                    data.board = updatedGame.board.state();
+                        data.board = updatedGame.board.state();
 
-                    socket.emit("move-made", data);
-                    socket.broadcast.to(game.id).emit("move-made", data);
-                });
+                        socket.emit("move-made", data);
+                        socket.broadcast.to(game.id).emit("move-made", data);
+                    });
+                }
             });
         });
     });
