@@ -2,6 +2,7 @@
 var nko = require('nko')('+huZsg3PXM49A7mS');
 var MineSweeper = require('./mine').MineSweeper;
 var express = require('express');
+var Handlebars = require('handlebars');
 
 var redis = require("redis"),
     client = redis.createClient();
@@ -61,7 +62,8 @@ app.get('/board', function(req, res) {
       res.render('board', {
         title: 'Board',
         message: 'Simulated click on: ['+a+','+b+']',
-        board: mine.state()
+        board: mine.state(),
+        uuid: mine.uuid
       });
     });
   } else {
@@ -79,7 +81,8 @@ app.get('/board', function(req, res) {
       res.render('board', {
         title: 'Board',
         message: 'Assuming you clicked 5,5 on this newly generated board: <a href="/board?id=' + mine.uuid + '">' + mine.uuid + '</a>',
-        board: mine.state()
+        board: mine.state(),
+        uuid: mine.uuid
       });
     });
   }
@@ -107,7 +110,47 @@ io.sockets.on("connection", function (socket) {
     console.log(data);
     io.sockets.emit("moveMade", data);
   });
+  
+  socket.on("reveal", function(data) {
+    console.log(data);
+    client.get(data.id, function(err, replies) {
+      if (err) {
+        console.log("Error fetching board:" + data.id);
+      }
+      var mine = new MineSweeper(replies);
+      mine.revealTile(data.x,data.y);
+      client.set(mine.uuid, JSON.stringify(mine), function(err, replies) {
+        if (err) {
+          console.log("Error saving new")
+        }
+        io.sockets.emit("revealed", mine.state());
+      });
+    });
+  });
 });
+
+//WTB: each_with_index
+Handlebars.registerHelper("index", function(array, fn, elseFn) {
+  if (array && array.length > 0) {
+    var buffer = "";
+    for (var i = 0, j = array.length; i < j; i++) {
+      var item = array[i];
+      if (typeof item === 'object') {
+        item.idx = i;
+        buffer += fn(item);
+      } else {
+        buffer += fn({"item": item, idx: i});
+      }
+    }
+ 
+    return buffer;
+  }
+  else {
+    return elseFn();
+  }
+});
+
+
 
 // Listen
 

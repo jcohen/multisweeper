@@ -1,12 +1,17 @@
 {{{message}}}
-<div class="board">
-{{#board}}
-<div class="row">
-{{#line}}
-<div class="cell">
-{{.}}
+<div data-board-id="{{uuid}}" class="board">
+{{#index board}}
+<div data-row-id="{{idx}}" class="row">
+{{#index line}}
+<div data-col-id="{{idx}}" class="cell">
+{{item}}
 </div>
-{{/line}}
+{{/index}}
 </div>
-{{/board}}
+{{/index}}
 </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/game.js"></script>
+<script src="/js/multisweeper.js"></script>

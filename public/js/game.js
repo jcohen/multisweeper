@@ -24,6 +24,10 @@
           util.log("Move made by: <b>" + data.playerName + "</b> at <b>" + data.time + "</b>: " + data.move + "<br />");
         });
 
+        this.socket.on("revealed", function(data) {
+          util.log(data);
+        });
+
         this.socket.emit("register", { "playerName" : this.playerName });
     };
 
@@ -31,4 +35,9 @@
         console.log("Taking a turn...");
         this.socket.emit("turn", { "playerName" : this.playerName, "time" : new Date().getTime(), "move": "some move identifier" });
     };
+    
+    Game.prototype.reveal = function(id,x,y) {
+        console.log("Clicking tile ["+x+","+y+"]");
+        this.socket.emit("reveal", { "id": id, "x": x, "y": y});
+    }
 })(window.multisweeper = window.multisweeper || {}, jQuery);
