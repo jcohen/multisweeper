@@ -23,7 +23,12 @@ module.exports = function(app) {
                         "board": updatedGame.board.state()
                     });
 
-                    socket.broadcast.to(updatedGame.id).emit("new-player", player);
+                    socket.broadcast.to(updatedGame.id).emit("new-player", {
+                        "gameId" : updatedGame.gameId,
+                        "players" : updatedGame.players,
+                        "board": updatedGame.board.state(),
+                        "player": player
+                    });
                 });
             });
         });

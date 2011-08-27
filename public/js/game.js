@@ -33,13 +33,7 @@
                 that.state = data.board;
                 that.players = data.players;
                 util.log("<b>" + data.playerName + "</b> made a move: <b>" + data.x + "," + data.y + "</b> in game: <b>" + data.game + "</b>");
-                //TODO: de-dupe
-                var templates = new multisweeper.Templates();
-                templates.preload();
-                templates.get("board", function(template) {
-                    $("#main").empty().html(template({uuid: that.gameId, board: that.state, players: that.players}));
-                })
-
+                refresh(data);
             });
 
             callback();
@@ -50,7 +44,16 @@
         this.socket.emit("turn", { "game" : this.gameId, "playerName" : this.playerName, "time" : new Date().getTime(), "x": x, "y": y });
     };
 
+    function refresh(data) {
+        var templates = new multisweeper.Templates();
+        templates.preload();
+        templates.get("board", function(template) {
+            $("#main").empty().html(template({uuid: data.gameId, board: data.board, players: data.players}));
+        })
+    };
+    
     function playerJoined(data) {
-        util.log("<b>" + data.playerName + "</b> joined the game!");
+        util.log("<b>" + data.player.playerName + "</b> joined the game!");
+        refresh(data);
     }
 })(window.multisweeper = window.multisweeper || {}, jQuery);
