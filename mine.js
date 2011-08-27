@@ -74,7 +74,7 @@ MineSweeper.prototype.clearFlag = function(x,y) {
       var count = 0;
       for(var i=x-1; i<=x+1; i++) {
         for(var j=y-1; j<=y+1; j++) {
-          if (this.board[i][j] === MineSweeper.BOMB || this.board[i][j] === MineSweeper.BOMB_AND_FLAG) {
+          if (this.validSquare(i,j) && this.hasBomb(i,j)) {
             count += 1;
           }
         }
