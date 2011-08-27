@@ -96,6 +96,14 @@
     margin-right: 50px;
 }
 
+.gameover .footnote {
+    margin-left: 15px;
+    font-size: 12px;
+}
+
+.gameover a {
+    color: #008CDA;
+}
 .gameover .score {
     float: right;
 }
