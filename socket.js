@@ -36,12 +36,10 @@ module.exports = function(app) {
                 var outcome = game.board.revealTile(data.x,data.y);
                 console.log("Outcome: %s", outcome);
                 if (!outcome) {
+                    socket.emit("mine-hit", data);
+                    socket.broadcast.to(game.id).emit("mine-hit", data);
                     console.log("Hit a mine at %s,%s",data.x,data.y);
-                    gameClient.endGame(game, function(err) {
-                        socket.emit("end-game", data);
-                        socket.broadcast.to(game.id).emit("end-game", data);
-                        return;
-                    });
+                    return;
                 }
                 else {
                     game.board.display();
@@ -49,10 +47,18 @@ module.exports = function(app) {
                     gameClient.updateGame(game, function(err, updatedGame) {
                         console.log("broadcasting new game state");
 
-                        data.board = updatedGame.board.state();
+                        if (game.board.over(game)) {
+                            gameClient.endGame(game, function (err) {
+                                socket.emit("end-game", data);
+                                socket.broadcast.to(game.id).emit("end-game", data);
+                                return;
+                            });
+                        } else {
+                            data.board = updatedGame.board.state();
 
-                        socket.emit("move-made", data);
-                        socket.broadcast.to(game.id).emit("move-made", data);
+                            socket.emit("move-made", data);
+                            socket.broadcast.to(game.id).emit("move-made", data);
+                        }
                     });
                 }
             });

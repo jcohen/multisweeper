@@ -116,6 +116,10 @@ MineSweeper.prototype.validSquare = function(x,y) {
   return x >= 0 && x < this.height && y >= 0 && y < this.width;
 };
 
+MineSweeper.prototype.over = function() {
+    return (this.revealed + MineSweeper.BOMB_COUNT) >= (this.width*this.height);
+}
+
 MineSweeper.BOMB_COUNT = 15;
 MineSweeper.EMPTY = 0;
 MineSweeper.BOMB = -1;

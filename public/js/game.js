@@ -20,8 +20,11 @@
             that.state = data.board;
 
             that.socket.on("new-player", playerJoined);
+            that.socket.on("mine-hit", function(data) {
+                util.log("<b>" + data.playerName + "</b> hit a bomb! at " + data.x + "," + data.y); 
+            });
             that.socket.on("end-game", function(data) {
-               util.log("<b>" + data.playerName + "</b> hit a bomb! at " + data.x + "," + data.y); 
+               util.log("<b>" + data.playerName + "</b> finished the board!"); 
             });
             that.socket.on("move-made", function(data) {
                 util.log("Game state is: " + JSON.stringify(data));
