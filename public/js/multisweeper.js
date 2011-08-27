@@ -22,14 +22,17 @@
         })
     }
 
-    $(".cell").live('click', function() {
+    $(".cell").live('click', function(e) {
         var $this = $(this);
         id = $this.closest(".board").data('board-id');
         x = $this.closest(".row").data('row-id');
         y = $this.data('col-id');
 
         console.log("Click: " + x + "," + y);
-
-        game.takeTurn(id,x,y);
+        if (e.shiftKey) {
+            game.flag(id,x,y);
+        } else {
+            game.takeTurn(id,x,y);
+        }
     });
 })(window.multisweeper = window.multisweeper || {}, jQuery);

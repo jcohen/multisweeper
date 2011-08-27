@@ -40,6 +40,16 @@ MineSweeper.prototype.placeMine = function(x, y) {
   }
 };
 
+MineSweeper.prototype.toggleFlag = function(x,y) {
+    if(this.validSquare(x,y)) {
+        if (this.hasFlag(x,y)) {
+            this.clearFlag(x,y);
+        } else {
+            this.placeFlag(x,y);
+        }
+    }
+}
+
 MineSweeper.prototype.placeFlag = function(x,y) {
   if (this.validSquare(x,y)) {
     if (this.board[x][y] < MineSweeper.REVEAL_MODIFIER) {
@@ -76,6 +86,9 @@ MineSweeper.prototype.revealTile = function(x,y) {
     if(this.hasBomb(x,y)) {
       return false;
     }
+    if (this.hasFlag(x,y)) {
+        return;
+    }
     if (this.board[x][y] === MineSweeper.EMPTY) { //empty
       this.board[x][y] += MineSweeper.REVEAL_MODIFIER;
       this.revealed += 1;
@@ -104,6 +117,13 @@ MineSweeper.prototype.revealTile = function(x,y) {
 MineSweeper.prototype.hasBomb = function(x,y) {
   if (this.validSquare(x,y)) {
     return this.board[x][y] === MineSweeper.BOMB || this.board[x][y] === MineSweeper.BOMB_AND_FLAG;
+  }
+  return false;
+}
+
+MineSweeper.prototype.hasFlag = function(x,y) {
+  if (this.validSquare(x,y)) {
+    return this.board[x][y] === MineSweeper.FLAG || this.board[x][y] === MineSweeper.BOMB_AND_FLAG;
   }
   return false;
 }
@@ -138,7 +158,7 @@ MineSweeper.prototype.state = function() {
       }
       if (this.board[i][j] >= MineSweeper.REVEAL_MODIFIER) {
         line[line.length] = x;
-      } else if (this.board[i][j] === MineSweeper.FLAG || this.board[i][j] === MineSweeper.BOMB_AND_FLAG) {
+      } else if (this.hasFlag(i,j)) {
         line[line.length] = 'F';
       } else {
         line[line.length] = '.';
@@ -172,7 +192,7 @@ MineSweeper.prototype.display = function() {
       }
       if (this.board[i][j] >= MineSweeper.REVEAL_MODIFIER) {
         view += x;
-      } else if (this.board[i][j] === MineSweeper.FLAG || this.board[i][j] === MineSweeper.BOMB_AND_FLAG){
+      } else if (this.hasFlag(i,j)){
         view += 'F';
       } else {
         view += '.';

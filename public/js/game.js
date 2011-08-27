@@ -43,6 +43,10 @@
     Game.prototype.takeTurn = function(board, x, y) {
         this.socket.emit("turn", { "game" : this.gameId, "playerName" : this.playerName, "time" : new Date().getTime(), "x": x, "y": y });
     };
+    
+    Game.prototype.flag = function(board, x, y) {
+        this.socket.emit("flag", { "game" : this.gameId, "playerName" : this.playerName, "time" : new Date().getTime(), "x": x, "y": y });
+    }
 
     function refresh(data) {
         var templates = new multisweeper.Templates();

@@ -33,6 +33,37 @@ module.exports = function(app) {
             });
         });
 
+        socket.on("flag", function handleTurn(data) {
+            gameClient.getGame(data.game, function(err, game) {
+                if (err) {
+                    return;
+                }
+                game.board.display();
+                game.board.toggleFlag(data.x,data.y);
+                gameClient.updateGame(game, function(err, updatedGame) {
+                    console.log("broadcasting new game state");
+
+                    data.board = updatedGame.board.state();
+
+                    socket.emit("move-made", data);
+                    socket.broadcast.to(game.id).emit("move-made", data);
+
+                    if (game.board.over(game)) {
+                        gameClient.endGame(game, function (err) {
+                            socket.emit("end-game", data);
+                            socket.broadcast.to(game.id).emit("end-game", data);
+                            gameClient.postScores(game.players, function(err) {
+                                if (err) {
+                                    console.log("Error:" + err);
+                                }
+                            });
+                            return;
+                        });
+                    }
+                });
+            });
+        });
+
         socket.on("turn", function handleTurn(data) {
             gameClient.getGame(data.game, function(err, game) {
                 if (err) {
