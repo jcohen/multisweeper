@@ -140,7 +140,7 @@ MineSweeper.prototype.over = function() {
     return (this.revealed + MineSweeper.BOMB_COUNT) >= (this.width*this.height);
 }
 
-MineSweeper.BOMB_COUNT = 0;
+MineSweeper.BOMB_COUNT = 15;
 MineSweeper.EMPTY = 0;
 MineSweeper.BOMB = -1;
 MineSweeper.FLAG = -2;
