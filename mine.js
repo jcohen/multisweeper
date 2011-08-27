@@ -1,8 +1,7 @@
 var uuid = require('node-uuid');
 
-var MineSweeper = exports.MineSweeper = function(state) {
-  if (state != undefined) {
-    model = JSON.parse(state);
+var MineSweeper = exports.MineSweeper = function(model) {
+  if (model != undefined) {
     this.uuid = model.uuid;
     this.width = model.width;
     this.height = model.height;
@@ -85,7 +84,7 @@ MineSweeper.prototype.revealTile = function(x,y) {
           if (i==x && y==j) {
             continue;
           }
-          if (this.validSquare(i,j) && this.board[i][j] < MineSweeper.REVEAL_MODIFIER && 
+          if (this.validSquare(i,j) && this.board[i][j] < MineSweeper.REVEAL_MODIFIER &&
               this.board[i][j] != MineSweeper.FLAG) {
                 this.revealTile(i,j);
           }
@@ -128,7 +127,7 @@ MineSweeper.prototype.state = function() {
   var lines = [];
   for(var i=0;i<this.height;i++) {
     var line = [];
-    for(var j=0;j<this.width;j++){ 
+    for(var j=0;j<this.width;j++){
       var x = this.board[i][j];
       if (x >= MineSweeper.REVEAL_MODIFIER) {
         x -= MineSweeper.REVEAL_MODIFIER;
@@ -146,12 +145,12 @@ MineSweeper.prototype.state = function() {
   return lines;
 }
 
-//debug 
+//debug
 MineSweeper.prototype.display = function() {
   for(var i=0;i<this.height;i++) {
     line = '';
     view = '';
-    for(var j=0;j<this.width;j++){ 
+    for(var j=0;j<this.width;j++){
       var x = this.board[i][j];
       if (x >= MineSweeper.REVEAL_MODIFIER) {
         x -= MineSweeper.REVEAL_MODIFIER;

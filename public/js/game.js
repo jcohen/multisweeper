@@ -14,13 +14,16 @@
         this.socket.on("game-assignment", function(data) {
             that.state = data;
             util.log("Got game assignment: <b>" + data.gameId + "</b>");
+            util.log("Game state is: " + JSON.stringify(data));
 
             that.gameId = data.gameId;
-            that.state = JSON.parse(data.board);
+            that.state = data.board;
 
             that.socket.on("new-player", playerJoined);
             that.socket.on("move-made", function(data) {
-                that.state = JSON.parse(data.board);
+                util.log("Game state is: " + JSON.stringify(data));
+
+                that.state = data.board;
                 util.log("<b>" + data.playerName + "</b> made a move: <b>" + data.x + "," + data.y + "</b> in game: <b>" + data.game + "</b>");
                 //TODO: de-dupe
                 var templates = new multisweeper.Templates();

@@ -20,8 +20,6 @@
     });
 
     Handlebars.registerHelper("classForCell", function(cellContent) {
-        console.log("index: " + cellContent.idx);
-
         var css = "";
         if (cellContent.idx === 0) {
             css += " left"
