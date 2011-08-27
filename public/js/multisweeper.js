@@ -7,6 +7,13 @@
         game = new multisweeper.Game($("#name").val());
         game.join(showGame);
     });
+    
+    $("#name").keypress(function(event){
+        if(event.keyCode == 13){
+            event.preventDefault();
+            $("#joinGame").click();
+        }
+    });
 
     $("#randomMove").live("click", function() {
         function random(upTo) {
