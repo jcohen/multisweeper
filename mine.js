@@ -1,20 +1,30 @@
 var uuid = require('node-uuid');
 
-var MineSweeper = exports.MineSweeper = function() {
-  this.uuid = uuid();
-  this.width = 10;
-  this.height = 10;
-  this.board = new Array(this.height);
-  for (i=0;i<this.height;i++) {
-    this.board[i] = new Array(this.width);
-    for (j=0;j<this.width;j++) {
-      this.board[i][j] = MineSweeper.EMPTY;
+var MineSweeper = exports.MineSweeper = function(state) {
+  if (state != undefined) {
+    model = JSON.parse(state);
+    this.uuid = model.uuid;
+    this.width = model.width;
+    this.height = model.height;
+    this.board = model.board;
+    this.revealed = model.revealed;
+  } else {
+    this.uuid = uuid();
+    this.width = 10;
+    this.height = 10;
+    this.revealed = 0;
+    this.board = new Array(this.height);
+    for (i=0;i<this.height;i++) {
+      this.board[i] = new Array(this.width);
+      for (j=0;j<this.width;j++) {
+        this.board[i][j] = MineSweeper.EMPTY;
+      }
     }
-  }
-  var placed = 0;
-  while (placed<MineSweeper.BOMB_COUNT) {
-    this.placeMine(this.random(this.height),this.random(this.width));
-    placed++;
+    var placed = 0;
+    while (placed<MineSweeper.BOMB_COUNT) {
+      this.placeMine(this.random(this.height),this.random(this.width));
+      placed++;
+    }
   }
 };
 
@@ -31,6 +41,37 @@ MineSweeper.prototype.placeMine = function(x, y) {
   }
 };
 
+MineSweeper.prototype.placeFlag = function(x,y) {
+  if (this.validSquare(x,y)) {
+    if (this.board[x][y] < MineSweeper.REVEAL_MODIFIER) {
+      if (this.hasBomb(x,y)) {
+        this.board[x][y] = MineSweeper.BOMB_AND_FLAG;
+      } else {
+        this.board[x][y] = MineSweeper.FLAG;
+      }
+    }
+  }
+}
+
+MineSweeper.prototype.clearFlag = function(x,y) {
+  if (this.validSquare(x,y)) {
+    if (this.board[x][y] === MineSweeper.BOMB_AND_FLAG) {
+      this.board[x][y] = MineSweeper.BOMB;
+    } else if (this.board[x][y] === MineSweeper.FLAG) {
+      //restore flag count..
+      var count = 0;
+      for(var i=x-1; i<=x+1; i++) {
+        for(var j=y-1; j<=y+1; j++) {
+          if (this.board[i][j] === MineSweeper.BOMB || this.board[i][j] === MineSweeper.BOMB_AND_FLAG) {
+            count += 1;
+          }
+        }
+      }
+      this.board[x][y] = count;
+    }
+  }
+}
+
 MineSweeper.prototype.revealTile = function(x,y) {
   if (this.validSquare(x,y)) {
     if(this.hasBomb(x,y)) {
@@ -38,6 +79,7 @@ MineSweeper.prototype.revealTile = function(x,y) {
     }
     if (this.board[x][y] === MineSweeper.EMPTY) { //empty
       this.board[x][y] += MineSweeper.REVEAL_MODIFIER;
+      this.revealed += 1;
       for(var i=x-1; i<=x+1; i++) {
         for(var j=y-1; j<=y+1; j++) {
           if (i==x && y==j) {
@@ -50,7 +92,10 @@ MineSweeper.prototype.revealTile = function(x,y) {
         }
       }
     } else {
-      this.board[x][y] += MineSweeper.REVEAL_MODIFIER;
+      if (this.board[x][y] < MineSweeper.REVEAL_MODIFIER) {
+        this.board[x][y] += MineSweeper.REVEAL_MODIFIER;
+        this.revealed += 1;
+      }
     }
     return true;
   }
@@ -59,7 +104,7 @@ MineSweeper.prototype.revealTile = function(x,y) {
 
 MineSweeper.prototype.hasBomb = function(x,y) {
   if (this.validSquare(x,y)) {
-    return this.board[x][y] === MineSweeper.BOMB;
+    return this.board[x][y] === MineSweeper.BOMB || this.board[x][y] === MineSweeper.BOMB_AND_FLAG;
   }
   return false;
 }
@@ -76,6 +121,7 @@ MineSweeper.BOMB_COUNT = 15;
 MineSweeper.EMPTY = 0;
 MineSweeper.BOMB = -1;
 MineSweeper.FLAG = -2;
+MineSweeper.BOMB_AND_FLAG = -3;
 MineSweeper.REVEAL_MODIFIER = 10;
 
 MineSweeper.prototype.state = function() {
@@ -89,6 +135,8 @@ MineSweeper.prototype.state = function() {
       }
       if (this.board[i][j] >= MineSweeper.REVEAL_MODIFIER) {
         line[line.length] = x;
+      } else if (this.board[i][j] === MineSweeper.FLAG || this.board[i][j] === MineSweeper.BOMB_AND_FLAG) {
+        line[line.length] = 'F';
       } else {
         line[line.length] = '.';
       }
@@ -110,6 +158,10 @@ MineSweeper.prototype.display = function() {
       }
       if (x === MineSweeper.BOMB) {
         line += '*';
+      } else if (x === MineSweeper.BOMB_AND_FLAG) {
+        line += '+';
+      } else if (x === MineSweeper.FLAG) {
+        line += 'F';
       } else if (x >= MineSweeper.REVEALED) {
         line += '.';
       } else {
@@ -117,10 +169,13 @@ MineSweeper.prototype.display = function() {
       }
       if (this.board[i][j] >= MineSweeper.REVEAL_MODIFIER) {
         view += x;
+      } else if (this.board[i][j] === MineSweeper.FLAG || this.board[i][j] === MineSweeper.BOMB_AND_FLAG){
+        view += 'F';
       } else {
         view += '.';
       }
     }
     console.log(line + " -"+i+"- " + view);
   }
+  console.log("Revealed:" + this.revealed);
 }
