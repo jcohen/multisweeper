@@ -1,4 +1,4 @@
-var RGC = require("./redis-game-client");
+var RGC = require("../redis-game-client");
 
 var gc = new RGC();
 
