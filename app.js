@@ -1,12 +1,37 @@
 // server.js
-var http = require('http')
-, nko = require('nko')('+huZsg3PXM49A7mS');
+var http = require('http');
+var nko = require('nko')('+huZsg3PXM49A7mS');
 
-var app = http.createServer(function (req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end('Hello, World');
+var express = require('express');
+
+var app = module.exports = express.createServer();
+
+// Configuration
+
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'hbs');
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(express.static(__dirname + '/public'));
 });
 
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
+
+app.configure('production', function(){
+  app.use(express.errorHandler());
+});
+
+// Routes
+
+app.get('/', function(req, res){
+  res.render('index', {
+    title: 'Express'
+  });
+});
 
 app.listen(process.env.NODE_ENV === 'production' ? 80 : 8000, function() {
   console.log('Ready');
