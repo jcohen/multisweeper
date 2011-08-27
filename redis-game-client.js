@@ -102,7 +102,7 @@ RedisGameClient.prototype.getAvailableGame = function(callback) {
 
     function createGameAndUpdateAvailable() {
         that.createGame(function(err, game) {
-            that.client.hset(GAMES_KEY, FILLING_GAME_ID_KEY, game.gameId);
+            client.hset(GAMES_KEY, FILLING_GAME_ID_KEY, game.gameId);
             callback(null, game);
         });
     }
