@@ -21,8 +21,16 @@
     });
 
     function showGame() {
-        templates.get("game", function(template) {
-            $("#main").empty().html(template(game.state));
+        templates.get("board", function(template) {
+            $("#main").empty().html(template({uuid: game.gameId, board: game.state}));
         })
     }
+    
+    $(".cell").live('click', function() {
+      id = $(this).closest(".board").data('board-id');
+      x = $(this).closest(".row").data('row-id');
+      y = $(this).data('col-id')
+      console.log("Click:" + x + "," + y);
+      game.takeTurn(id,x,y);
+    });
 })(window.multisweeper = window.multisweeper || {}, jQuery);

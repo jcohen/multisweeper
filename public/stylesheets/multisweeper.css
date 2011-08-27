@@ -10,3 +10,6 @@
   text-align: center;
   float: left;
 }
+.clear {
+    clear: both;
+}

@@ -1,3 +1,11 @@
+var MineSweeper = require('./mine').MineSweeper;
+var redis = require("redis"),
+    client = redis.createClient();
+
+client.on("error", function (err) {
+  console.log("Redis Error " + err);
+});
+
 module.exports = function(app) {
     var io = require("socket.io").listen(app);
 
@@ -6,7 +14,22 @@ module.exports = function(app) {
 
     io.sockets.on("connection", function (socket) {
         socket.on("join", function(data) {
-            var gameId = "some-game-id"; // TODO: find a game waiting for more players or create a new one
+            var gameId;
+            var mine;
+            for (game in games) {
+                console.log("GAME %j", game);
+                gameId = game["id"];
+            }
+            if (gameId === undefined) {
+                console.log("Spinning up a new game...");
+                mine = new MineSweeper();
+                gameId = mine.uuid;
+                client.set(mine.uuid, JSON.stringify(mine), function(err, replies) {
+                    if (err) {
+                        console.log("Error saving new game %s", mine.uuid);
+                    }
+                });
+            }
 
             var game = games[gameId];
             if (!game) {
@@ -23,7 +46,8 @@ module.exports = function(app) {
             socket.join(game.id);
             socket.emit("game-assignment", {
                 "gameId" : game.id,
-                "players" : game.players
+                "players" : game.players,
+                "board": JSON.stringify(mine.state())
             });
 
             socket.broadcast.to(game.id).emit("new-player", data);
@@ -41,7 +65,25 @@ module.exports = function(app) {
 
             console.log("handling turn in game %s with data: %j", game.id, data);
 
-            socket.broadcast.to(game.id).emit("move-made", data);
+            client.get(game.id, function(err, replies) {
+                if (err) {
+                    console.log("Error fetching board:" + data.id);
+                }
+                var mine = new MineSweeper(replies);
+                mine.display();
+                mine.revealTile(data.x,data.y);
+                mine.display();
+                client.set(mine.uuid, JSON.stringify(mine), function(err, replies) {
+                    if (err) {
+                        console.log("Error saving new")
+                    }
+                    data['board']= JSON.stringify(mine.state());
+                    console.log("broadcasting new game state");
+                    socket.emit("move-made", data);
+                });
+            });
+
+
         });
 
         socket.on("reveal", function(data) {

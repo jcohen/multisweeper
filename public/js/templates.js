@@ -1,4 +1,24 @@
 (function(multisweeper, $) {
+    Handlebars.registerHelper("index", function(array, fn, elseFn) {
+      if (array && array.length > 0) {
+        var buffer = "";
+        for (var i = 0, j = array.length; i < j; i++) {
+          var item = array[i];
+          if (typeof item === 'object') {
+            item.idx = i;
+            buffer += fn(item);
+          } else {
+            buffer += fn({"item": item, idx: i});
+          }
+        }
+
+        return buffer;
+      }
+      else {
+        return elseFn();
+      }
+    });
+    
     var loadedTemplates = {};
 
     var Templates = multisweeper.Templates = function() {

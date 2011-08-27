@@ -1,15 +1,8 @@
 // server.js
 var nko = require('nko')('+huZsg3PXM49A7mS');
-var MineSweeper = require('./mine').MineSweeper;
 var express = require('express');
 var Handlebars = require('handlebars');
 
-var redis = require("redis"),
-    client = redis.createClient();
-
-client.on("error", function (err) {
-  console.log("Redis Error " + err);
-});
 
 var app = module.exports = express.createServer();
 
