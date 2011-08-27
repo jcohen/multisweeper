@@ -234,7 +234,7 @@ RedisGameClient.prototype.postScores = function(players, callback) {
 };
 
 RedisGameClient.prototype.loadScores = function(callback) {
-    client.zrange(HIGHSCORE_KEY, 0, 100, 'withscores', function(err, data) {
+    client.zrevrangebyscore(HIGHSCORE_KEY, '+inf', '-inf', 'withscores', 'limit', 0, 100, function(err, data) {
         if (err) {
             callback(err);
         }
