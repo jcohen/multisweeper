@@ -7,7 +7,7 @@
 
     Game.prototype.join = function(callback) {
         var that = this;
-        this.socket = io.connect("http://localhost");
+        this.socket = io.connect("/");
 
         this.socket.emit("join", { "playerName" : this.playerName });
 
