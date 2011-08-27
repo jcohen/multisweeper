@@ -37,6 +37,9 @@ app.get('/', function(req, res){
 app.get('/board', function(req, res) {
   var mine = new MineSweeper();
   mine.display();
+  console.log("Clicking 5,5");
+  mine.revealTile(5,5);
+  mine.display();
   console.log(JSON.stringify(mine));
   res.render('index', {
     title: 'Board'
