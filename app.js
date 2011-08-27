@@ -26,6 +26,8 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
+require('hbs').handlebars = require("handlebars");
+
 // Routes
 
 app.get('/', function(req, res){
