@@ -1,19 +1,28 @@
 (function(multisweeper, $) {
-    var game = new multisweeper.Game();
-    var connected = false;
+    var game;
+    var templates = new multisweeper.Templates();
+    templates.preload();
 
-    $("#connect").bind("click", function(e) {
-        if (connected) { return; }
-
-        console.log("Connecting...")
-        game.connect();
-
-        connected = true;
+    $("#joinGame").click(function() {
+        game = new multisweeper.Game($("#name").val());
+        game.join(showGame);
     });
 
-    $("#turn").bind("click", function() {
-        console.log("Taking turn...");
+    $("#randomMove").live("click", function() {
+        function random(upTo) {
+            return Math.floor(Math.random() * upTo) + 1;
+        }
 
-        game.takeTurn()
+        var boardId = random(9);
+        var x = random(10);
+        var y = random(10);
+
+        game.takeTurn(boardId, x, y);
     });
+
+    function showGame() {
+        templates.get("game", function(template) {
+            $("#main").empty().html(template(game.state));
+        })
+    }
 })(window.multisweeper = window.multisweeper || {}, jQuery);
