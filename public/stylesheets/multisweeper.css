@@ -1,0 +1,12 @@
+.board {
+  width: 100px;
+  height: 100px;
+}
+.row {
+  height: 10px;
+}
+.cell {
+  width: 10px;
+  text-align: center;
+  float: left;
+}

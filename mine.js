@@ -78,6 +78,25 @@ MineSweeper.BOMB = -1;
 MineSweeper.FLAG = -2;
 MineSweeper.REVEAL_MODIFIER = 10;
 
+MineSweeper.prototype.state = function() {
+  var lines = [];
+  for(var i=0;i<this.height;i++) {
+    var line = [];
+    for(var j=0;j<this.width;j++){ 
+      var x = this.board[i][j];
+      if (x >= MineSweeper.REVEAL_MODIFIER) {
+        x -= MineSweeper.REVEAL_MODIFIER;
+      }
+      if (this.board[i][j] >= MineSweeper.REVEAL_MODIFIER) {
+        line[line.length] = x;
+      } else {
+        line[line.length] = '.';
+      }
+    }
+    lines[lines.length] = {"line": line};
+  }
+  return lines;
+}
 
 //debug 
 MineSweeper.prototype.display = function() {
