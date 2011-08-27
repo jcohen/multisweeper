@@ -9,8 +9,16 @@ client.on("error", function (err) {
 var GAMES_KEY = "games";
 var FILLING_GAME_ID_KEY = "filling-game-id";
 var HIGHSCORE_KEY = "scores";
+var LOCK_KEY = "lock";
+var DEFAULT_LOCK_EXPIRATION = 100; // 100 ms
+var LOCK_ACQUISITION_INTERVAL = 1; // 1 ms
+var LOCK_ACQUISITION_TIMEOUT = 200; // 200 ms
 
 var MAX_PLAYERS = 8;
+
+function lockKeyForGame(game) {
+    return LOCK_KEY + "." + game.gameId;
+}
 
 var RedisGameClient = module.exports = function() {
 
@@ -22,6 +30,95 @@ var RedisGameClient = module.exports = function() {
 // set pointer to currently filling game: HSET games working game-id
 // get pointer to currently filling game: HGET games working
 // delete pointer to currently filling game: HDEL games working
+
+/*
+ * Redis Lock acquisition, see: http://redis.io/commands/setnx
+ */
+RedisGameClient.prototype.acquireLock = function(game, timeout, callback) {
+    if (typeof timeout === "function") {
+        callback = timeout;
+        timeout = new Date().getTime() + LOCK_ACQUISITION_TIMEOUT;
+    }
+
+    console.log("Trying to acquire lock on game: %s, timeout is: %d", game.gameId, timeout);
+
+    if (new Date().getTime() >= timeout) {
+        console.log("Timed out trying to acquire lock for game: %s, giving up :(", game.gameId);
+        callback(null, { "acquired" : false });
+    }
+
+    var that = this;
+    var gameLockId = lockKeyForGame(game);
+
+    function expirationTime() {
+        return new Date().getTime() + DEFAULT_LOCK_EXPIRATION + 1;
+    }
+
+    var expiration = expirationTime();
+    client.setnx(gameLockId, expiration, function(err, data) {
+        if (err) {
+            console.log("Error acquiring lock: " + err);
+            return callback(null, { "acquired" : false });
+        }
+
+        var acquired = (data === 1);
+
+        if (acquired) {
+            console.log("Lock acquired!");
+            // invoke callback normally
+            callback(null, { "acquired" : true, "expiration" : expiration });
+        } else {
+            console.log("Lock not acquired, checking if lock is expired...");
+            // check to see if lock is expired
+            client.get(gameLockId, function(err, expiration) {
+                if (err) {
+                    console.log("Error acquiring lock: " + err);
+                    return callback(null, { "acquired" : false });
+                }
+
+                console.log("Lock expiration: %s", expiration);
+
+                expiration = (expiration * 1);
+
+                if (new Date().getTime() >= expiration) {
+                    console.log("Lock is expired, trying to acquire and avoid deadlock...");
+
+                    // lock is expired, try to update the expiration while avoiding a deadlock
+                    var newExpiration = expirationTime();
+                    client.getset(gameLockId, newExpiration, function(err, data) {
+                        if (err) {
+                            console.log("Error acquiring lock: " + err);
+                            return callback(null, { "acquired" : false });
+                        }
+
+                        console.log("Previous expiration on lock: %s", data);
+
+                        var previousExpiration = (data * 1);
+
+                        if (new Date().getTime() >= previousExpiration) {
+                            console.log("Lock (finally!) acquired.");
+                            callback(null, { "acquired" : true, "expiration" : newExpiration });
+                        } else {
+                            // someone else acquired the lock before us, start over.
+                            console.log("Someone beat us to the lock, oh no! Starting over.");
+                            return that.acquireLock(game, expiration, callback);
+                        }
+                    });
+                } else {
+                    console.log("Lock is not expired, trying again to acquire in %d ms", LOCK_ACQUISITION_INTERVAL);
+                    setTimeout(function() {
+                        that.acquireLock(game, timeout, callback);
+                    }, LOCK_ACQUISITION_INTERVAL);
+                }
+            });
+        }
+    });
+};
+
+RedisGameClient.prototype.releaseLock = function(game, callback) {
+    console.log("Releasing lock for game: %s", game.gameId);
+    client.del(lockKeyForGame(game), callback);
+};
 
 RedisGameClient.prototype.createGame = function(callback) {
     var game = {
