@@ -45,7 +45,6 @@ MineSweeper.prototype.revealTile = function(x,y) {
           }
           if (this.validSquare(i,j) && this.board[i][j] < MineSweeper.REVEAL_MODIFIER && 
               this.board[i][j] != MineSweeper.FLAG) {
-                this.display();
                 this.revealTile(i,j);
           }
         }
@@ -73,7 +72,7 @@ MineSweeper.prototype.validSquare = function(x,y) {
   return x >= 0 && x < this.height && y >= 0 && y < this.width;
 };
 
-MineSweeper.BOMB_COUNT = 5;
+MineSweeper.BOMB_COUNT = 15;
 MineSweeper.EMPTY = 0;
 MineSweeper.BOMB = -1;
 MineSweeper.FLAG = -2;
