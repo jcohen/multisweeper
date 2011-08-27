@@ -43,22 +43,5 @@ module.exports = function(app) {
                 });
             });
         });
-
-        socket.on("reveal", function(data) {
-            console.log(data);
-            client.get(data.id, function(err, replies) {
-                if (err) {
-                    console.log("Error fetching board:" + data.id);
-                }
-                var mine = new MineSweeper(replies);
-                mine.revealTile(data.x,data.y);
-                client.set(mine.uuid, JSON.stringify(mine), function(err, replies) {
-                    if (err) {
-                        console.log("Error saving new")
-                    }
-                    io.sockets.emit("revealed", mine.state());
-                });
-            });
-        });
     });
 };
