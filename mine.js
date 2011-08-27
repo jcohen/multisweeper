@@ -1,20 +1,28 @@
 var uuid = require('node-uuid');
 
-var MineSweeper = exports.MineSweeper = function() {
-  this.uuid = uuid();
-  this.width = 10;
-  this.height = 10;
-  this.board = new Array(this.height);
-  for (i=0;i<this.height;i++) {
-    this.board[i] = new Array(this.width);
-    for (j=0;j<this.width;j++) {
-      this.board[i][j] = MineSweeper.EMPTY;
+var MineSweeper = exports.MineSweeper = function(state) {
+  if (state != undefined) {
+    model = JSON.parse(state);
+    this.uuid = model.uuid;
+    this.width = model.width;
+    this.height = model.height;
+    this.board = model.board;
+  } else {
+    this.uuid = uuid();
+    this.width = 10;
+    this.height = 10;
+    this.board = new Array(this.height);
+    for (i=0;i<this.height;i++) {
+      this.board[i] = new Array(this.width);
+      for (j=0;j<this.width;j++) {
+        this.board[i][j] = MineSweeper.EMPTY;
+      }
     }
-  }
-  var placed = 0;
-  while (placed<MineSweeper.BOMB_COUNT) {
-    this.placeMine(this.random(this.height),this.random(this.width));
-    placed++;
+    var placed = 0;
+    while (placed<MineSweeper.BOMB_COUNT) {
+      this.placeMine(this.random(this.height),this.random(this.width));
+      placed++;
+    }
   }
 };
 
