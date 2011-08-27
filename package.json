@@ -8,7 +8,7 @@
     "lib": "."
   },
   "dependencies": {
-      "nko": "*",
+      "nko": "*"
   },
   "engines": {
     "node": "0.4.11"
