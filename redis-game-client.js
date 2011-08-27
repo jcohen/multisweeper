@@ -8,6 +8,7 @@ client.on("error", function (err) {
 
 var GAMES_KEY = "games";
 var FILLING_GAME_ID_KEY = "filling-game-id";
+var HIGHSCORE_KEY = "scores";
 
 var MAX_PLAYERS = 8;
 
@@ -128,3 +129,18 @@ RedisGameClient.prototype.getAvailableGame = function(callback) {
         });
     }
 };
+
+RedisGameClient.prototype.postScores = function(players, callback) {
+    for (var i=0;i<players.length;i++) {
+        client.zadd(HIGHSCORE_KEY, players[i].score, players[i].playerName);
+    }
+};
+
+RedisGameClient.prototype.loadScores = function(callback) {
+    client.zrange(HIGHSCORE_KEY, 0, 100, 'withscores', function(err, data) {
+        if (err) {
+            callback(err);
+        }
+        callback(null, data);
+    });
+}

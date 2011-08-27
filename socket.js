@@ -70,6 +70,11 @@ module.exports = function(app) {
                             gameClient.endGame(game, function (err) {
                                 socket.emit("end-game", data);
                                 socket.broadcast.to(game.id).emit("end-game", data);
+                                gameClient.postScores(game.players, function(err) {
+                                    if (err) {
+                                        console.log("Error:" + err);
+                                    }
+                                });
                                 return;
                             });
                         }
