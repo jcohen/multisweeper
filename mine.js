@@ -63,10 +63,13 @@ MineSweeper.prototype.placeFlag = function(x,y) {
 }
 
 MineSweeper.prototype.clearFlag = function(x,y) {
+  console.log("clearing flag %s,%s",x,y);
   if (this.validSquare(x,y)) {
     if (this.board[x][y] === MineSweeper.BOMB_AND_FLAG) {
+      console.log("had bomb");
       this.board[x][y] = MineSweeper.BOMB;
     } else if (this.board[x][y] === MineSweeper.FLAG) {
+      console.log("has flag, restoring count");
       //restore flag count..
       var count = 0;
       for(var i=x-1; i<=x+1; i++) {
@@ -77,6 +80,7 @@ MineSweeper.prototype.clearFlag = function(x,y) {
         }
       }
       this.board[x][y] = count;
+      console.log("has flag, restoring count to: %d", count);
     }
   }
 }
