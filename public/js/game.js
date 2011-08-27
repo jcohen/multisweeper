@@ -1,43 +1,39 @@
 (function(multisweeper, $) {
     var Game = multisweeper.Game = function(playerName) {
-        this.playerName = playerName || "Player " + Math.ceil(1 + Math.random() * (100 - 0)); // TODO: get current player count from node
+        this.playerName = playerName;
     };
 
     var util = new multisweeper.Utils();
 
-    Game.prototype.connect = function() {
-        this.socket = io.connect("http://localhost");
+    Game.prototype.join = function(callback) {
+        var that = this;
+        this.socket = io.connect("/");
 
-        this.socket.on("connected", function(data) {
-            util.log("Connected. There are <b>" + data.players.length + "</b> other players");
+        this.socket.emit("join", { "playerName" : this.playerName });
 
-            for (var i = 0, l = data.players.length; i < l; i++) {
-                util.log("Player: <b>" + data.players[i].playerName + "</b>");
-            }
+        this.socket.on("game-assignment", function(data) {
+            that.state = data;
+            util.log("Got game assignment: <b>" + data.gameId + "</b>");
+
+            that.gameId = data.gameId;
+            // that.gameSocket = io.connect("http://localhost/" + that.gameId);
+
+            that.socket.on("new-player", playerJoined);
+            that.socket.on("move-made", moveMade);
+
+            callback();
         });
-
-        this.socket.on("newPlayer", function(data) {
-            util.log("Player: <b>" + data.playerName + "</b> connected");
-        });
-
-        this.socket.on("moveMade", function(data) {
-          util.log("Move made by: <b>" + data.playerName + "</b> at <b>" + data.time + "</b>: " + data.move + "<br />");
-        });
-
-        this.socket.on("revealed", function(data) {
-          util.log(data);
-        });
-
-        this.socket.emit("register", { "playerName" : this.playerName });
     };
 
-    Game.prototype.takeTurn = function() {
-        console.log("Taking a turn...");
-        this.socket.emit("turn", { "playerName" : this.playerName, "time" : new Date().getTime(), "move": "some move identifier" });
+    Game.prototype.takeTurn = function(board, x, y) {
+        this.socket.emit("turn", { "game" : this.gameId, "playerName" : this.playerName, "time" : new Date().getTime(), "move": board + "," + x + "," + y });
     };
-    
-    Game.prototype.reveal = function(id,x,y) {
-        console.log("Clicking tile ["+x+","+y+"]");
-        this.socket.emit("reveal", { "id": id, "x": x, "y": y});
+
+    function playerJoined(data) {
+        util.log("<b>" + data.playerName + "</b> joined the game!");
+    }
+
+    function moveMade(data) {
+        util.log("<b>" + data.playerName + "</b> made a move: <b>" + data.move + "</b> in game: <b>" + data.game + "</b>");
     }
 })(window.multisweeper = window.multisweeper || {}, jQuery);
