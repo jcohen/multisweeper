@@ -10,6 +10,7 @@ module.exports = function(app) {
 
     io.sockets.on("connection", function (socket) {
         socket.on("join", function(player) {
+            player['score'] = 0;
             // TODO: ensure player name is unique to game
             gameClient.getAvailableGame(function(err, game) {
                 game.players.push(player);
@@ -33,8 +34,16 @@ module.exports = function(app) {
                     return;
                 }
                 game.board.display();
+                var points = game.board.revealed;
                 var outcome = game.board.revealTile(data.x,data.y);
-                console.log("Outcome: %s", outcome);
+                points = game.board.revealed - points;
+                for (var i=0;i<game.players.length;i++) {
+                    if (game.players[i].playerName === data.playerName) {
+                        game.players[i].score += points;
+                    }
+                }
+                data.players = game.players;
+                console.log("Points: %s", points);
                 if (!outcome) {
                     socket.emit("mine-hit", data);
                     socket.broadcast.to(game.id).emit("mine-hit", data);

@@ -18,7 +18,8 @@
 
             that.gameId = data.gameId;
             that.state = data.board;
-
+            that.players = data.players;
+            
             that.socket.on("new-player", playerJoined);
             that.socket.on("mine-hit", function(data) {
                 util.log("<b>" + data.playerName + "</b> hit a bomb! at " + data.x + "," + data.y); 
@@ -30,12 +31,13 @@
                 util.log("Game state is: " + JSON.stringify(data));
 
                 that.state = data.board;
+                that.players = data.players;
                 util.log("<b>" + data.playerName + "</b> made a move: <b>" + data.x + "," + data.y + "</b> in game: <b>" + data.game + "</b>");
                 //TODO: de-dupe
                 var templates = new multisweeper.Templates();
                 templates.preload();
                 templates.get("board", function(template) {
-                    $("#main").empty().html(template({uuid: that.gameId, board: that.state}));
+                    $("#main").empty().html(template({uuid: that.gameId, board: that.state, players: that.players}));
                 })
 
             });

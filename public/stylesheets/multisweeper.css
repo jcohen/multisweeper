@@ -1,3 +1,18 @@
+.players {
+    margin-bottom: 20px;
+    min-height: 30px;
+}
+.player {
+    float: left;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.score {
+    display: inline;
+    font-size: 12px;
+}
+
 .board {
   width: 180px;
   height: 200px;

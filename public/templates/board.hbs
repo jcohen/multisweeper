@@ -1,3 +1,15 @@
+<div class="players">
+{{#players}}
+  <div class="player">
+    {{playerName}}
+    <div class="score">
+      {{score}}
+    </div>
+  </div>
+{{/players}}
+</div>
+
+<div class="clear"></div>
 <div data-board-id="{{uuid}}" class="board">
 {{#index board}}
   <div data-row-id="{{idx}}" class="row">

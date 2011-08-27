@@ -18,7 +18,7 @@
 
     function showGame() {
         templates.get("board", function(template) {
-            $("#main").empty().html(template({uuid: game.gameId, board: game.state}));
+            $("#main").empty().html(template({uuid: game.gameId, board: game.state, players: game.players}));
         })
     }
 
