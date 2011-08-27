@@ -36,6 +36,9 @@
             case "F" :
                 css += " flag";
                 break;
+            case "B" :
+                css += " bomb";
+                break;
             default :
                 if (typeof cellContent.item === "number") {
                     css += " revealed nearby" + cellContent.item;

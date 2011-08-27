@@ -72,7 +72,7 @@ module.exports = function(app) {
                 }
                 game.board.display();
                 var points = game.board.revealed;
-                var outcome = game.board.revealTile(data.x,data.y);
+                var outcome = game.board.revealTile(data.x,data.y, true);
                 points = game.board.revealed - points;
                 for (var i=0;i<game.players.length;i++) {
                     if (game.players[i].playerName === data.playerName) {
@@ -85,32 +85,30 @@ module.exports = function(app) {
                     socket.emit("mine-hit", data);
                     socket.broadcast.to(game.id).emit("mine-hit", data);
                     console.log("Hit a mine at %s,%s",data.x,data.y);
-                    return;
-                } else {
-                    game.board.display();
-
-                    gameClient.updateGame(game, function(err, updatedGame) {
-                        console.log("broadcasting new game state");
-
-                        data.board = updatedGame.board.state();
-
-                        socket.emit("move-made", data);
-                        socket.broadcast.to(game.id).emit("move-made", data);
-
-                        if (game.board.over(game)) {
-                            gameClient.endGame(game, function (err) {
-                                socket.emit("end-game", data);
-                                socket.broadcast.to(game.id).emit("end-game", data);
-                                gameClient.postScores(game.players, function(err) {
-                                    if (err) {
-                                        console.log("Error:" + err);
-                                    }
-                                });
-                                return;
-                            });
-                        }
-                    });
                 }
+                game.board.display();
+
+                gameClient.updateGame(game, function(err, updatedGame) {
+                    console.log("broadcasting new game state");
+
+                    data.board = updatedGame.board.state();
+
+                    socket.emit("move-made", data);
+                    socket.broadcast.to(game.id).emit("move-made", data);
+
+                    if (game.board.over(game)) {
+                        gameClient.endGame(game, function (err) {
+                            socket.emit("end-game", data);
+                            socket.broadcast.to(game.id).emit("end-game", data);
+                            gameClient.postScores(game.players, function(err) {
+                                if (err) {
+                                    console.log("Error:" + err);
+                                }
+                            });
+                            return;
+                        });
+                    }
+                });
             });
         });
     });

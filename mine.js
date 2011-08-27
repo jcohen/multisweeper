@@ -81,9 +81,15 @@ MineSweeper.prototype.clearFlag = function(x,y) {
   }
 }
 
-MineSweeper.prototype.revealTile = function(x,y) {
+MineSweeper.prototype.revealTile = function(x,y,first) {
   if (this.validSquare(x,y)) {
     if(this.hasBomb(x,y)) {
+      if (first) {
+          console.log("explicit click on bomb");
+          //explicit click on bomb
+          this.board[x][y] = MineSweeper.BOMB_REVEALED;
+          this.display();
+      }
       return false;
     }
     if (this.hasFlag(x,y)) {
@@ -99,7 +105,7 @@ MineSweeper.prototype.revealTile = function(x,y) {
           }
           if (this.validSquare(i,j) && this.board[i][j] < MineSweeper.REVEAL_MODIFIER &&
               this.board[i][j] != MineSweeper.FLAG) {
-                this.revealTile(i,j);
+                this.revealTile(i, j, false);
           }
         }
       }
@@ -116,7 +122,9 @@ MineSweeper.prototype.revealTile = function(x,y) {
 
 MineSweeper.prototype.hasBomb = function(x,y) {
   if (this.validSquare(x,y)) {
-    return this.board[x][y] === MineSweeper.BOMB || this.board[x][y] === MineSweeper.BOMB_AND_FLAG;
+    return this.board[x][y] === MineSweeper.BOMB ||
+     this.board[x][y] === MineSweeper.BOMB_AND_FLAG ||
+     this.board[x][y] === MineSweeper.BOMB_REVEALED;
   }
   return false;
 }
@@ -145,6 +153,7 @@ MineSweeper.EMPTY = 0;
 MineSweeper.BOMB = -1;
 MineSweeper.FLAG = -2;
 MineSweeper.BOMB_AND_FLAG = -3;
+MineSweeper.BOMB_REVEALED = -4;
 MineSweeper.REVEAL_MODIFIER = 10;
 
 MineSweeper.prototype.state = function() {
@@ -160,6 +169,8 @@ MineSweeper.prototype.state = function() {
         line[line.length] = x;
       } else if (this.hasFlag(i,j)) {
         line[line.length] = 'F';
+      } else if (this.board[i][j] === MineSweeper.BOMB_REVEALED) {
+        line[line.length] = 'B';
       } else {
         line[line.length] = '.';
       }
@@ -187,6 +198,8 @@ MineSweeper.prototype.display = function() {
         line += 'F';
       } else if (x >= MineSweeper.REVEALED) {
         line += '.';
+      } else if (x === MineSweeper.BOMB_REVEALED) {
+        line += 'o';
       } else {
         line += x;
       }
@@ -194,6 +207,8 @@ MineSweeper.prototype.display = function() {
         view += x;
       } else if (this.hasFlag(i,j)){
         view += 'F';
+      } else if (this.board[i][j] === MineSweeper.BOMB_REVEALED) {
+        view += 'B';
       } else {
         view += '.';
       }
