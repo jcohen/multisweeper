@@ -17,7 +17,6 @@
 
             that.gameId = data.gameId;
             that.state = JSON.parse(data.board);
-            // that.gameSocket = io.connect("http://localhost/" + that.gameId);
 
             that.socket.on("new-player", playerJoined);
             that.socket.on("move-made", function(data) {
@@ -29,7 +28,7 @@
                 templates.get("board", function(template) {
                     $("#main").empty().html(template({uuid: that.gameId, board: that.state}));
                 })
-                
+
             });
 
             callback();
