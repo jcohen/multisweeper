@@ -8,7 +8,7 @@
     margin-right: 10px;
 }
 
-.score {
+.player .score {
     display: inline;
     font-size: 12px;
 }
@@ -46,6 +46,63 @@
 
 }
 
+.overlay {
+    background: rgba(0,0,0,0.9);
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+}
+.gameover h2 {
+    text-align: center;
+    margin-top: 0px;
+}
+
+.gameover {
+    z-index: 2;
+    width: 500px;
+    border: 3px solid #008CDA;
+    background: #ffffff;
+    padding: 5px;
+    font-size: 20px;
+    position:absolute;
+    top:20%;
+    left:50%;
+    margin-left:-250px
+}
+
+.gameover .button {
+    float: right;
+    background: #008CDA;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-right: 15px;
+}
+
+.gameover .content {
+    background: #e5e5e5;
+    padding:15px;
+    margin: 15px;
+}
+
+.gameover .result {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.gameover .score {
+    float: right;
+}
+
+.hidden {
+    display: none;
+}
 .clear {
     clear: both;
 }

@@ -19,6 +19,10 @@
         }
     });
 
+    Handlebars.registerHelper("inc", function(val, fn, elseFn) {
+        return val + 1;
+    });
+
     Handlebars.registerHelper("classForCell", function(cellContent) {
         var css = "";
         if (cellContent.idx === 0) {

@@ -15,6 +15,10 @@
             $("#joinGame").click();
         }
     });
+    
+    $(".done").live('click', function() {
+       window.location.href="/game"; 
+    });
 
     function showGame() {
         templates.get("board", function(template) {

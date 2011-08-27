@@ -25,7 +25,8 @@
                 util.log("<b>" + data.playerName + "</b> hit a bomb! at " + data.x + "," + data.y); 
             });
             that.socket.on("end-game", function(data) {
-               util.log("<b>" + data.playerName + "</b> finished the board!"); 
+               util.log("<b>" + data.playerName + "</b> finished the board!");
+               finishGame(data);
             });
             that.socket.on("move-made", function(data) {
                 util.log("Game state is: " + JSON.stringify(data));
@@ -56,8 +57,23 @@
         })
     };
     
+    function finishGame(data) {
+        var templates = new multisweeper.Templates();
+        templates.preload();
+        data.players.sort(byScore);
+        templates.get("gameover", function(template) {
+            $(".gameover").html(template({players: data.players}));
+        })
+        $(".overlay").show();
+        $(".gameover").show();
+    }
+    
     function playerJoined(data) {
         util.log("<b>" + data.player.playerName + "</b> joined the game!");
         refresh(data);
+    }
+    
+    function byScore(a, b) {
+        return b.score - a.score;
     }
 })(window.multisweeper = window.multisweeper || {}, jQuery);

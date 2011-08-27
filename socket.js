@@ -85,8 +85,7 @@ module.exports = function(app) {
                     socket.broadcast.to(game.id).emit("mine-hit", data);
                     console.log("Hit a mine at %s,%s",data.x,data.y);
                     return;
-                }
-                else {
+                } else {
                     game.board.display();
 
                     gameClient.updateGame(game, function(err, updatedGame) {
