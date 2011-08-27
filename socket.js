@@ -74,14 +74,18 @@ module.exports = function(app) {
                 var points = game.board.revealed;
                 var outcome = game.board.revealTile(data.x,data.y, true);
                 points = game.board.revealed - points;
-                for (var i=0;i<game.players.length;i++) {
+                adjustScore(game.players, data.playerName, points);
+/*                for (var i=0;i<game.players.length;i++) {
                     if (game.players[i].playerName === data.playerName) {
                         game.players[i].score += points;
                     }
                 }
+*/
                 data.players = game.players;
                 console.log("Points: %s", points);
                 if (!outcome) {
+                    adjustScore(game.players, data.playerName, MineSweeper.BOMB_PENALTY);
+                    data.players = game.players;
                     socket.emit("mine-hit", data);
                     socket.broadcast.to(game.id).emit("mine-hit", data);
                     console.log("Hit a mine at %s,%s",data.x,data.y);
@@ -111,5 +115,14 @@ module.exports = function(app) {
                 });
             });
         });
+        
+        function adjustScore(players, player, amount) {
+            for (var i=0;i<players.length;i++) {
+                if (players[i].playerName === player) {
+                    console.log("Adjusting %s score: %d, by %d", player, players[i].score, amount);
+                    players[i].score += amount;
+                }
+            }
+        }
     });
 };

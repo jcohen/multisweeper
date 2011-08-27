@@ -155,6 +155,7 @@ MineSweeper.FLAG = -2;
 MineSweeper.BOMB_AND_FLAG = -3;
 MineSweeper.BOMB_REVEALED = -4;
 MineSweeper.REVEAL_MODIFIER = 10;
+MineSweeper.BOMB_PENALTY = -5;
 
 MineSweeper.prototype.state = function() {
   var lines = [];
