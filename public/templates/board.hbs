@@ -1,22 +1,24 @@
-<ul class="players">
-{{#players}}
-  <li class="player player-{{color}}">
-    <span class="name">{{playerName}}</span> <span class="score">{{score}}</span>
-  </li>
-{{/players}}
-</ul>
+<div id="board">
+  <ul class="players">
+  {{#players}}
+    <li class="player player-{{color}}">
+      <span class="name">{{playerName}}</span> <span class="score">{{score}}</span>
+    </li>
+  {{/players}}
+  </ul>
 
-<div class="clear"></div>
-<div data-board-id="{{uuid}}" class="board">
-{{#index board}}
-  <div data-row-id="{{idx}}" class="row">
-    {{#index line}}
-    <div data-col-id="{{idx}}" class="cell {{classForCell .}}">
-      <span>{{item}}</span>&nbsp;
+  <div class="clear"></div>
+  <div data-board-id="{{uuid}}" class="board">
+  {{#index board}}
+    <div data-row-id="{{idx}}" class="row">
+      {{#index line}}
+      <div data-col-id="{{idx}}" class="cell {{classForCell .}}">
+        <span>{{item}}</span>&nbsp;
+      </div>
+      {{/index}}
     </div>
-    {{/index}}
+  {{/index}}
   </div>
-{{/index}}
 </div>
 
 <div class="clear"></div>

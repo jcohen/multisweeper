@@ -1,3 +1,68 @@
+@font-face {
+    font-family:'classic-robot';
+    src: url('/fonts/Classic-Robot.ttf');
+}
+
+html {
+    background: #d8e7ec url(/images/robot_and_bird.png) bottom left no-repeat fixed;
+    font-family: Helvetica;
+}
+
+#content {
+    text-align: right;
+    margin-right: 10%;
+    margin-left: 40%;
+}
+
+#content h1 {
+    font-size: 64px;
+    font-family: classic-robot;
+    font-weight: bold;
+}
+
+#content a {
+    font-size: 36px;
+    text-decoration: none;
+    color: #e46949;
+}
+
+#content a:visited {
+    font-size: 24px;
+    text-decoration: none;
+}
+
+#content p {
+    font-size: 24px;
+}
+
+#main {
+    margin-top: 10%;
+    margin-right: 10%;
+}
+
+#board {
+    text-align: left;
+    margin-left: 10%;
+}
+
+#main form {
+    text-align: right;
+    margin-left: 40%;
+}
+
+#main input[type="text"] {
+    background: #d8e7ec;
+    border: 1px solid #468599;
+    font-size: 24px;
+    width: 325px;
+}
+
+#main input[type="button"] {
+    background: #d8e7ec;
+    border: 1px solid #468599;
+    font-size: 24px;
+}
+
 .players {
     margin-bottom: 30px;
     min-height: 30px;
