@@ -27,15 +27,45 @@ module.exports = function(app) {
                         "gameId" : updatedGame.gameId,
                         "players" : updatedGame.players,
                         "player" : player,
-                        "board": updatedGame.board.state()
+                        "board": updatedGame.board.state(),
+                        "active": updatedGame.board.started ? 'active' : 'inactive'
                     });
 
                     socket.broadcast.to(updatedGame.id).emit("new-player", {
                         "gameId" : updatedGame.gameId,
                         "players" : updatedGame.players,
                         "board": updatedGame.board.state(),
-                        "player": player
+                        "player": player,
+                        "active": updatedGame.board.started ? 'active' : 'inactive'
                     });
+                });
+            });
+        });
+        
+        socket.on("chat", function(data) {
+            gameClient.getGame(data.game, function(err, game) {
+                if (err) {
+                    return;
+                }
+                socket.emit("chat", data);
+                socket.broadcast.to(game.id).emit("chat", data);
+            });
+        });
+        
+        socket.on("start", function beginGame(data) {
+            gameClient.getGame(data.game, function(err, game) {
+                if (err) {
+                    return;
+                }
+                game.board.startGame();
+                gameClient.updateGame(game, function(err, updatedGame) {
+                    console.log("broadcasting new game start");
+
+                    data.board = updatedGame.board.state();
+                    data.players = updatedGame.players;
+                    
+                    socket.emit("game-start", data);
+                    socket.broadcast.to(game.id).emit("game-start", data);
                 });
             });
         });
@@ -45,6 +75,9 @@ module.exports = function(app) {
                 if (err) {
                     return;
                 }
+                if (!game.board.started) {
+                    return;
+                }
                 game.board.display();
                 game.board.toggleFlag(data.x,data.y);
                 gameClient.updateGame(game, function(err, updatedGame) {
@@ -52,7 +85,8 @@ module.exports = function(app) {
 
                     data.board = updatedGame.board.state();
                     data.players = updatedGame.players;
-
+                    data.active = updatedGame.board.started ? 'active' : 'inactive'
+                    
                     socket.emit("move-made", data);
                     socket.broadcast.to(game.id).emit("move-made", data);
 
@@ -77,17 +111,14 @@ module.exports = function(app) {
                 if (err) {
                     return;
                 }
+                if (!game.board.started) {
+                    return;
+                }
                 game.board.display();
                 var points = game.board.revealed;
                 var outcome = game.board.revealTile(data.x,data.y, true);
                 points = game.board.revealed - points;
                 adjustScore(game.players, data.playerName, points);
-/*                for (var i=0;i<game.players.length;i++) {
-                    if (game.players[i].playerName === data.playerName) {
-                        game.players[i].score += points;
-                    }
-                }
-*/
                 data.players = game.players;
                 console.log("Points: %s", points);
                 if (!outcome) {
@@ -103,7 +134,7 @@ module.exports = function(app) {
                     console.log("broadcasting new game state");
 
                     data.board = updatedGame.board.state();
-
+                    data.active = updatedGame.board.started ? 'active' : 'inactive'
                     socket.emit("move-made", data);
                     socket.broadcast.to(game.id).emit("move-made", data);
 

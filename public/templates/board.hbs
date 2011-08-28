@@ -1,26 +1,25 @@
-<div id="board">
-  <ul class="players">
+<ul class="players">
   {{#players}}
-    <li class="player player-{{color}}">
-      <span class="name">{{playerName}}</span> <span class="score">{{score}}</span>
-    </li>
+  <li class="player player-{{color}}">
+    <span class="name">{{playerName}}</span> <span class="score">{{score}}</span>
+  </li>
   {{/players}}
-  </ul>
+</ul>
 
-  <div class="clear"></div>
-  <div data-board-id="{{uuid}}" class="board">
+<div class="clear"></div>
+<div data-board-id="{{uuid}}" class="board">
   {{#index board}}
-    <div data-row-id="{{idx}}" class="row">
-      {{#index line}}
-      <div data-col-id="{{idx}}" class="cell {{classForCell .}}">
-        <span>{{item}}</span>&nbsp;
-      </div>
-      {{/index}}
+  <div data-row-id="{{idx}}" class="row">
+    {{#index line}}
+    <div data-col-id="{{idx}}" class="cell {{classForCell .}}">
+      <span>{{item}}</span>&nbsp;
     </div>
-  {{/index}}
+    {{/index}}
   </div>
+  {{/index}}
 </div>
-
+</div>
+<div class="waiting {{active}}">Wait for more players, or <input class="start" value="Start Game" type="button"></input></div>
 <div class="clear"></div>
 
 

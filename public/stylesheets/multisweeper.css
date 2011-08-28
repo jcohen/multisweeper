@@ -131,8 +131,8 @@ html {
 }
 
 .board {
-    width: 170px;
-    height: 190px;
+    width: 1020px;
+    height: 380px;
     border-right: 1px solid;
     border-bottom: 1px solid;
     margin-bottom: 10px;
@@ -320,7 +320,26 @@ html {
     padding-right: 15px;
 }
 
+#log {
+    height: 200px;
+    width: 600px;
+    overflow: auto;
+    border: 1px solid #008cda;
+}
+#chat {
+    width: 550px;
+}
+
+.waiting.active {
+    display: none;
+}
+.waiting.inactive {
+    display: block;
+}
 .hidden {
+    display: none;
+}
+.inactive {
     display: none;
 }
 .clear {
