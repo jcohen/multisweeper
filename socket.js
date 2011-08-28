@@ -14,10 +14,8 @@ module.exports = function(app) {
                 gameClient.addPlayerToGame(game, playerData.playerName, function(err, data) {
                     if (err) {
                         if (err.error === "NAME_IN_USE") {
-                            // TODO: message name in use to user
+                            return socket.emit("name-in-use", playerData.playerName);
                         }
-
-                        return callback();
                     }
 
                     var updatedGame = data.game;
@@ -146,7 +144,7 @@ module.exports = function(app) {
                 });
             });
         });
-        
+
         function adjustScore(players, player, amount) {
             for (var i=0;i<players.length;i++) {
                 if (players[i].playerName === player) {

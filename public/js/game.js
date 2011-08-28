@@ -3,13 +3,16 @@
         this.playerName = playerName;
     };
 
-    var util = new multisweeper.Utils();
+    var util = multisweeper.Utils;
+    var templates = util.templates;
 
     Game.prototype.join = function(callback) {
         var that = this;
         this.socket = io.connect("/");
 
         this.socket.emit("join", { "playerName" : this.playerName });
+
+        this.socket.on("name-in-use", nameInUse);
 
         this.socket.on("game-assignment", function(data) {
             that.state = data;
@@ -61,22 +64,22 @@
     };
 
     function refresh(data) {
-        var templates = new multisweeper.Templates();
-        templates.preload();
         templates.get("board", function(template) {
             $("#main").empty().html(template({uuid: data.gameId, board: data.board, players: data.players, active: data.active}));
         })
     };
 
     function finishGame(data) {
-        var templates = new multisweeper.Templates();
-        templates.preload();
         data.players.sort(byScore);
         templates.get("gameover", function(template) {
             $(".gameover").html(template({players: data.players}));
         })
         $(".overlay").show();
         $(".gameover").show();
+    }
+
+    function nameInUse(data) {
+        util.showModal("Name in use", "Oh no! Someone's already using that name! What are the odds of that?");
     }
 
     function playerJoined(data) {
