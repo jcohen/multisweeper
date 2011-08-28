@@ -27,4 +27,9 @@ module.exports = function(app) {
             res.render("scores", {'scores': results});
         });
     });
+    
+    app.get("/nom", function(req, res) {
+       res.cookie('bacon', 'nomnom');
+       res.end('OK\n');
+    });
 };

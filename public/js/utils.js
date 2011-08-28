@@ -4,6 +4,8 @@
     };
 
     Utils.prototype.log = function(message) {
-        $("#log").prepend("<b>[" + new Date().getTime() + "]</b> " + message + "<br />");
+        if (document.cookie && document.cookie.match(/bacon/)) {
+            $("#log").prepend("<b>[" + new Date().getTime() + "]</b> " + message + "<br />");
+        }
     };
 })(window.multisweeper = window.multisweeper || {}, jQuery);
