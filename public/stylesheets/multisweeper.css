@@ -289,6 +289,10 @@ html {
     margin-right: 50px;
 }
 
+.gameover .name {
+    width: 300px;
+}
+
 .gameover .footnote {
     margin-left: 15px;
     font-size: 12px;

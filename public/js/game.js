@@ -113,6 +113,7 @@
         })
         $(".overlay").show();
         $(".gameover").show();
+        $(".gameover .truncate").textTruncate({width: 240});
     }
 
     function nameInUse(data) {

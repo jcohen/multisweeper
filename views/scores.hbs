@@ -10,7 +10,7 @@ Think you can <a href="/game">beat</a> them?
 <div class="highscores">
 {{#index scores}}
   <div class="entry">
-  {{inc idx}}. <span class="name">{{name}}</span> <span class="score">{{score}}</score>
+  {{inc idx}}. <span class="name truncate">{{name}}</span> <span class="score">{{score}}</score>
   </div>
   <div class="clear"></div>
 {{/index}}
@@ -20,4 +20,5 @@ Think you can <a href="/game">beat</a> them?
 <script>
     $(".entry:odd").css("background-color", "#d6c5c4");
     $(".entry:even").css("background-color", "#d8e7ec");
+    $(".truncate").textTruncate({width: 240});
 </script>
