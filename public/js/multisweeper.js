@@ -15,9 +15,14 @@
             $("#joinGame").click();
         }
     });
-    
+
     $(".done").live('click', function() {
-       window.location.href="/game"; 
+       window.location.href="/game";
+    });
+
+    $(".dismiss").live("click", function() {
+        $(".overlay").hide();
+        $(".modal").hide();
     });
 
     function showGame() {
