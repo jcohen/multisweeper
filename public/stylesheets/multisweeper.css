@@ -287,26 +287,39 @@ html {
     float: right;
 }
 
+.hall {
+    font-family: classic-robot;
+}
+
 .hall h1 {
+    font-size: 64px;
     text-align: center;
+    font-weight: bold;
+}
+
+.hall h2 {
+    font-size: 32px;
+    text-align: center;
+    font-weight: bold;
 }
 
 .hall .preamble {
-    font-size: 14px;
+    font-size: 16px;
     margin:auto;
     width: 430px;
+    margin-bottom: 15px;
 }
 .hall .beat {
     float: right;
 }
 .hall .preamble a {
-    color: #008CDA;
+    color: #62a16a;
 }
 .highscores {
-    border: 5px solid #008CDA;
+    border: 5px solid #62a16a;
     margin: auto;
     width: 400px;
-    background: #a5a5a5;
+    background: #b38d68;
     padding:15px;
     font-size: 16px;
     line-height: 28px;
