@@ -36,13 +36,17 @@ html {
 }
 
 #main {
-    margin-top: 10%;
+    margin-top: 10px;
     margin-right: 10%;
 }
 
 #board {
     text-align: left;
     margin-left: 10%;
+}
+
+#joinForm {
+    margin-top: 10%;
 }
 
 #main form {
@@ -338,9 +342,11 @@ html {
     width: 600px;
     overflow: auto;
     border: 1px solid #008cda;
+    background: #d8e7ec;
 }
 #chat {
     width: 550px;
+    background: #d8e7ec;
 }
 
 .waiting.active {
