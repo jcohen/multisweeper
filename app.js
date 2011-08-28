@@ -47,7 +47,9 @@ Handlebars.registerHelper("index", function(array, fn, elseFn) {
     return buffer;
   }
   else {
-    return elseFn();
+    if (typeof elseFn === 'function') {
+        return elseFn();
+    }
   }
 });
 Handlebars.registerHelper("inc", function(val, fn, elseFn) {

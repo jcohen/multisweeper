@@ -19,7 +19,6 @@ module.exports = function(app) {
             if (err) {
                 console.log("Error loading scores");
             }
-            console.log(data);
             var results = []
             for (var i=0;i<data.length;i+=2) {
                 results.push({'name': data[i], 'score': data[i+1]});
