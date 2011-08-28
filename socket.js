@@ -16,7 +16,8 @@ module.exports = function(app) {
             "players" : game.players,
             "player"  : player,
             "board"   : game.board.state(),
-            "active"  : game.board.started ? 'active' : 'inactive'
+            "active"  : game.board.started ? 'active' : 'inactive',
+            "multiplier": game.board.multiplier
         });
 
         var event = (rejoin ? "player-rejoined" : "new-player");
@@ -25,7 +26,8 @@ module.exports = function(app) {
             "players" : game.players,
             "board"   : game.board.state(),
             "player"  : player,
-            "active"  : game.board.started ? 'active' : 'inactive'
+            "active"  : game.board.started ? 'active' : 'inactive',
+            "multiplier": game.board.multiplier
         });
     }
 
@@ -81,7 +83,8 @@ module.exports = function(app) {
                         "players" : data.game.players,
                         "board"   : data.game.board.state(),
                         "player"  : data.player,
-                        "active"  : data.game.board.started ? 'active' : 'inactive'
+                        "active"  : data.game.board.started ? 'active' : 'inactive',
+                        "multiplier": data.game.board.multiplier
                     });
 
                     return socket.emit("left-game");
@@ -132,7 +135,8 @@ module.exports = function(app) {
                     data.board = updatedGame.board.state();
                     data.players = updatedGame.players;
                     data.active = updatedGame.board.started ? 'active' : 'inactive'
-
+                    data.multiplier = updatedGame.board.multiplier
+                    
                     socket.emit("move-made", data);
                     socket.broadcast.to(game.gameId).emit("move-made", data);
 
@@ -163,17 +167,22 @@ module.exports = function(app) {
                 var points = game.board.revealed;
                 var outcome = game.board.revealTile(data.x,data.y, true);
                 points = game.board.revealed - points;
-                adjustScore(game.players, data.playerName, points);
+                adjustScore(game.players, data.playerName, points, game.board.multiplier);
                 data.players = game.players;
                 console.log("Points: %s", points);
+                console.log("Adjust multi = %d", game.board.multiplier);
                 if (!outcome) {
                     gameClient.stat("total_bombs");
-                    adjustScore(game.players, data.playerName, MineSweeper.BOMB_PENALTY);
+                    adjustScore(game.players, data.playerName, MineSweeper.BOMB_PENALTY, game.board.multiplier);
                     data.players = game.players;
                     socket.emit("mine-hit", data);
                     socket.broadcast.to(game.gameId).emit("mine-hit", data);
                     console.log("Hit a mine at %s,%s",data.x,data.y);
                 }
+                var multi = Math.ceil((game.board.revealed * 10) / (game.board.width*game.board.height));
+                console.log("percent %d", multi);
+                game.board.multiplier = multi;
+                data.multiplier = multi;
 
                 gameClient.updateGame(game, function(err, updatedGame) {
                     console.log("broadcasting new game state");
@@ -199,11 +208,11 @@ module.exports = function(app) {
             });
         });
 
-        function adjustScore(players, player, amount) {
+        function adjustScore(players, player, amount, multiplier) {
             for (var i=0;i<players.length;i++) {
                 if (players[i].playerName === player) {
                     console.log("Adjusting %s score: %d, by %d", player, players[i].score, amount);
-                    players[i].score += amount;
+                    players[i].score += (amount * multiplier);
                 }
             }
         }

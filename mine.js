@@ -8,12 +8,14 @@ var MineSweeper = exports.MineSweeper = function(model) {
     this.board = model.board;
     this.revealed = model.revealed;
     this.started = model.started;
+    this.multiplier = model.multiplier;
   } else {
     this.uuid = uuid();
     this.width = 60;
     this.height = 20;
     this.revealed = 0;
     this.started = false;
+    this.multiplier = 1;
     this.board = new Array(this.height);
     for (i=0;i<this.height;i++) {
       this.board[i] = new Array(this.width);

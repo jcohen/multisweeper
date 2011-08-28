@@ -165,9 +165,16 @@ html {
 .help {
     float: right;
     background: #cda075;
+    margin-left: 10px;
 }
 
-.help-overlay {
+.multiplier {
+    float: right;
+    background: #61a166;
+    color: #ffffff;
+}
+
+.help-overlay h2 {
     font-family: classic-robot;
     font-size: 22px;
 }

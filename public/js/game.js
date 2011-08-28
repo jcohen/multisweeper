@@ -35,6 +35,7 @@
             that.players = data.players;
             that.player = data.player;
             that.active = data.active;
+            that.multiplier = data.multiplier;
 
             that.socket.on("new-player", playerJoined);
 
@@ -108,7 +109,7 @@
 
     function refresh(data) {
         templates.get("board", function(template) {
-            $("#main").empty().html(template({uuid: data.gameId, board: data.board, players: data.players, active: data.active}));
+            $("#main").empty().html(template({uuid: data.gameId, board: data.board, players: data.players, active: data.active, multiplier: data.multiplier}));
         })
         $(".truncate").textTruncate();
     };

@@ -71,7 +71,7 @@
 
     function showGame() {
         util.templates.get("board", function(template) {
-            $("#main").empty().html(template({uuid: game.gameId, board: game.state, players: game.players, active: game.active}));
+            $("#main").empty().html(template({uuid: game.gameId, board: game.state, players: game.players, active: game.active, multiplier: game.multiplier}));
         })
         $(".truncate").textTruncate();
     }
