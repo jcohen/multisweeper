@@ -64,6 +64,31 @@ module.exports = function(app) {
             });
         });
 
+        socket.on("leave", function(data) {
+            gameClient.getGame(data.gameId, function(err, game) {
+                if (err) {
+                    return socket.emit("left-game", "error");
+                }
+
+                gameClient.removePlayerFromGame(data.playerName, game, function(err, data) {
+                    console.log("Player removed from game? err: %j, data: %j", err, data);
+                    if (err) {
+                        return socket.emit("left-game", "error");
+                    }
+
+                    socket.broadcast.to(data.game.gameId).emit("player-left", {
+                        "gameId"  : data.game.gameId,
+                        "players" : data.game.players,
+                        "board"   : data.game.board.state(),
+                        "player"  : data.player,
+                        "active"  : data.game.board.started ? 'active' : 'inactive'
+                    });
+
+                    return socket.emit("left-game");
+                });
+            });
+        });
+
         socket.on("chat", function(data) {
             gameClient.getGame(data.game, function(err, game) {
                 if (err) {

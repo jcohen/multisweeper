@@ -8,7 +8,12 @@
         var hydratedCookie = JSON.parse(cookie);
 
         game = new multisweeper.Game(hydratedCookie, showGame);
-        game.rejoin();
+
+        if (hydratedCookie.gameId) {
+            game.rejoin();
+        } else {
+            $("#name").val(hydratedCookie.playerName);
+        }
     }
 
     $("#joinGame").click(function() {
@@ -21,6 +26,13 @@
 
         game = new multisweeper.Game($("#name").val(), showGame);
         game.join();
+    });
+
+    $("#leaveGame").live("click", function() {
+        game.leave(function() {
+            $.cookie("multisweeper", null);
+            window.location = "/game";
+        });
     });
 
     $("#name").keypress(function(event){

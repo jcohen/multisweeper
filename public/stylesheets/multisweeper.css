@@ -238,6 +238,22 @@ html {
     color: #e50000;
 }
 
+.social h3 {
+    font-size: 24px;
+    background: #468599;
+    color: #E6F2F6;
+}
+
+.social div:not("#log") {
+    font-size: 16px;
+    background: #468599;
+    color: #E6F2F6;
+}
+
+.social input {
+    font-size: 16px;
+}
+
 .overlay {
     background: rgba(0,0,0,0.9);
     opacity: 0.5;
