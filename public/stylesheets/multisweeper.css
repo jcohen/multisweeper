@@ -177,7 +177,7 @@ html {
 }
 
 .bomb {
-    background: transparent url(/images/bomb.png) no-repeat 1px 1px;
+    background: #ccc url(/images/bomb.png) no-repeat 1px 1px;
 }
 
 .bomb span {
@@ -185,7 +185,7 @@ html {
 }
 
 .flag {
-    background: transparent url(/images/flag_blue.png) no-repeat 1px 1px;
+    background: #ccc url(/images/flag_blue.png) no-repeat 1px 1px;
 }
 
 .flag span {
