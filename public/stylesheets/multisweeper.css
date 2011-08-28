@@ -111,6 +111,14 @@
     padding-left: 4px;
 }
 
+.bomb {
+    background: transparent url(/images/bomb.png) no-repeat 1px 1px;
+}
+
+.bomb span {
+    display: none;
+}
+
 .flag {
     background: transparent url(/images/flag_blue.png) no-repeat 1px 1px;
 }
