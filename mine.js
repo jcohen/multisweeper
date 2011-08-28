@@ -10,8 +10,8 @@ var MineSweeper = exports.MineSweeper = function(model) {
     this.started = model.started;
   } else {
     this.uuid = uuid();
-    this.width = 10;
-    this.height = 10;
+    this.width = 60;
+    this.height = 20;
     this.revealed = 0;
     this.started = false;
     this.board = new Array(this.height);
@@ -154,7 +154,7 @@ MineSweeper.prototype.over = function() {
     return (this.revealed + MineSweeper.BOMB_COUNT) >= (this.width*this.height);
 }
 
-MineSweeper.BOMB_COUNT = 15;
+MineSweeper.BOMB_COUNT = 160;
 MineSweeper.EMPTY = 0;
 MineSweeper.BOMB = -1;
 MineSweeper.FLAG = -2;

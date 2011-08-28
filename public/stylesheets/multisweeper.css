@@ -66,8 +66,8 @@
 }
 
 .board {
-    width: 170px;
-    height: 190px;
+    width: 1020px;
+    height: 380px;
     border-right: 1px solid;
     border-bottom: 1px solid;
     margin-bottom: 10px;
