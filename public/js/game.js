@@ -28,11 +28,11 @@
 
             that.socket.on("new-player", playerJoined);
             that.socket.on("mine-hit", function(data) {
-                util.log("<b>" + data.playerName + "</b> hit a bomb! at " + data.x + "," + data.y);
+                util.message("<b>" + data.playerName + "</b> hit a bomb!");
             });
             that.socket.on("end-game", function(data) {
-               util.log("<b>" + data.playerName + "</b> finished the board!");
-               finishGame(data);
+                util.message("<b>" + data.playerName + "</b> finished the board!");
+                finishGame(data);
             });
             that.socket.on("game-start", function(data) {
                $(".board").show(); 

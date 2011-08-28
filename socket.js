@@ -86,7 +86,7 @@ module.exports = function(app) {
                     data.board = updatedGame.board.state();
                     data.players = updatedGame.players;
                     data.active = updatedGame.board.started ? 'active' : 'inactive'
-
+                    
                     socket.emit("move-made", data);
                     socket.broadcast.to(game.id).emit("move-made", data);
 
@@ -135,7 +135,6 @@ module.exports = function(app) {
 
                     data.board = updatedGame.board.state();
                     data.active = updatedGame.board.started ? 'active' : 'inactive'
-
                     socket.emit("move-made", data);
                     socket.broadcast.to(game.id).emit("move-made", data);
 
