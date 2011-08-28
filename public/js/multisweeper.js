@@ -7,7 +7,8 @@
     if (cookie) {
         var hydratedCookie = JSON.parse(cookie);
 
-        game = new multisweeper.Game(hydratedCookie)
+        game = new multisweeper.Game(hydratedCookie, showGame);
+        game.rejoin();
     }
 
     $("#joinGame").click(function() {
@@ -18,8 +19,8 @@
             return;
         }
 
-        game = new multisweeper.Game($("#name").val());
-        game.join(showGame);
+        game = new multisweeper.Game($("#name").val(), showGame);
+        game.join();
     });
 
     $("#name").keypress(function(event){

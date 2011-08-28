@@ -1,24 +1,27 @@
 (function(multisweeper, $) {
-    var Game = multisweeper.Game = function(playerName) {
-        this.playerName = playerName;
-    };
+    var Game = multisweeper.Game = function(data, gameReadyCallback) {
+        if (typeof data === "object") {
+            // initializing from cookie
+            this.playerName = data.player.playerName;
+            this.gameId = data.gameId
+        } else {
+            this.playerName = data;
+        }
 
-    var util = multisweeper.Utils;
-    var templates = util.templates;
-
-    Game.prototype.join = function(callback) {
-        var that = this;
         this.socket = io.connect("/");
-
-        this.socket.emit("join", { "playerName" : this.playerName });
 
         this.socket.on("name-in-use", nameInUse);
 
+        this.socket.on("rejoin-failed", function(data) {
+            console.log("Failed to rejoin existing game: %s, joining new game...", data);
+            that.join();
+        });
+
+        var that = this;
         this.socket.on("game-assignment", function(data) {
             $(".social").show();
             that.state = data;
             util.log("Got game assignment: <b>" + data.gameId + "</b>");
-            // util.log("Game state is: " + JSON.stringify(data));
 
             var cookie = {
                 "gameId" : data.gameId,
@@ -54,16 +57,30 @@
             });
 
             that.socket.on("move-made", function(data) {
-                // util.log("Game state is: " + JSON.stringify(data));
-
                 that.state = data.board;
                 that.players = data.players;
-                // util.log("<b>" + data.playerName + "</b> made a move: <b>" + data.x + "," + data.y + "</b> in game: <b>" + data.game + "</b>");
                 refresh(data);
             });
 
-            callback();
+            gameReadyCallback();
         });
+    };
+
+    var util = multisweeper.Utils;
+    var templates = util.templates;
+
+    Game.prototype.join = function() {
+        var that = this;
+
+        this.socket.emit("join", { "playerName" : this.playerName });
+    };
+
+    Game.prototype.rejoin = function() {
+        this.socket.emit("rejoin", { "playerName" : this.playerName, "gameId" : this.gameId });
+    };
+
+    Game.prototype.initializeOnGameAssignment = function() {
+
     };
 
     Game.prototype.takeTurn = function(board, x, y) {

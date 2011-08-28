@@ -8,7 +8,32 @@ module.exports = function(app) {
     var RedisGameClient = require("./redis-game-client");
     var gameClient = new RedisGameClient();
 
+    function assignPlayerToGame(player, game, rejoin, socket) {
+        socket.join(game.gameId);
+
+        socket.emit("game-assignment", {
+            "gameId"  : game.gameId,
+            "players" : game.players,
+            "player"  : player,
+            "board"   : game.board.state(),
+            "active"  : game.board.started ? 'active' : 'inactive'
+        });
+
+        var event = (rejoin ? "player-rejoined" : "new-player");
+        socket.broadcast.to(game.gameId).emit(event, {
+            "gameId"  : game.gameId,
+            "players" : game.players,
+            "board"   : game.board.state(),
+            "player"  : player,
+            "active"  : game.board.started ? 'active' : 'inactive'
+        });
+    }
+
     io.sockets.on("connection", function (socket) {
+        socket.on("disconnect", function() {
+            console.log("Received socket disconnect, args: %j", Array.prototype.slice.call(arguments));
+        });
+
         socket.on("join", function(playerData) {
             gameClient.getAvailableGame(function(err, game) {
                 gameClient.addPlayerToGame(game, playerData.playerName, function(err, data) {
@@ -18,27 +43,24 @@ module.exports = function(app) {
                         }
                     }
 
-                    var updatedGame = data.game;
-                    var player = data.player;
-
-                    socket.join(updatedGame.gameId);
-
-                    socket.emit("game-assignment", {
-                        "gameId" : updatedGame.gameId,
-                        "players" : updatedGame.players,
-                        "player" : player,
-                        "board": updatedGame.board.state(),
-                        "active": updatedGame.board.started ? 'active' : 'inactive'
-                    });
-
-                    socket.broadcast.to(updatedGame.gameId).emit("new-player", {
-                        "gameId" : updatedGame.gameId,
-                        "players" : updatedGame.players,
-                        "board": updatedGame.board.state(),
-                        "player": player,
-                        "active": updatedGame.board.started ? 'active' : 'inactive'
-                    });
+                    assignPlayerToGame(data.player, data.game, false, socket);
                 });
+            });
+        });
+
+        socket.on("rejoin", function(data) {
+            gameClient.getGame(data.gameId, function(err, game) {
+                if (err) {
+                    return socket.emit("rejoin-failed", "error");
+                }
+
+                if (game.board.over()) {
+                    return socket.emit("rejoin-failed", "game-over");
+                } else {
+                    gameClient.reactivatePlayerInGame(data.playerName, game, function(err, data) {
+                        assignPlayerToGame(data.player, data.game, true, socket);
+                    });
+                }
             });
         });
 

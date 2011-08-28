@@ -212,12 +212,6 @@ RedisGameClient.prototype.getGame = function(gameId, callback) {
     });
 };
 
-RedisGameClient.prototype.getGames = function(callback) {
-    // client.hgetall(GAMES_KEY, function(err, games) {
-    //
-    // });
-};
-
 RedisGameClient.prototype.addPlayerToGame = function(game, playerName, callback) {
     var that = this;
     this.acquireLock(game, function(err, lock) {
@@ -271,6 +265,33 @@ RedisGameClient.prototype.addPlayerToGame = function(game, playerName, callback)
 
         });
     });
+};
+
+RedisGameClient.prototype.reactivatePlayerInGame = function(playerName, game, callback) {
+    console.log("Trying to reactivate player: %s in game: %s", playerName, game.gameId);
+
+    var playerFound = false;
+    for (var i = 0, l = game.players.length; i < l; i++) {
+        var player = game.players[i];
+
+        if (player.playerName === playerName) {
+            playerFound = true;
+            player.active = true;
+
+            this.updateGame(game, function(err, updatedGame) {
+                if (err) {
+                    return callback(err, null);
+                }
+
+                return callback(null, { "game" : updatedGame, "player" : player });
+            });
+            break;
+        }
+    }
+
+    if (!playerFound) {
+        return callback({ "error" : "player-not-found"}, null);
+    }
 };
 
 RedisGameClient.prototype.getAvailableGame = function(callback) {
