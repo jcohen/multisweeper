@@ -380,9 +380,28 @@ RedisGameClient.prototype.getAvailableGame = function(callback) {
 
 RedisGameClient.prototype.postScores = function(players, callback) {
     for (var i=0;i<players.length;i++) {
-        client.zadd(HIGHSCORE_KEY, players[i].score, players[i].playerName);
+        var who = players[i].playerName;
+        var score = players[i].score;
+        postScore(who, score);
+    }
+
+    function postScore (who, score) {
+        client.zscore(HIGHSCORE_KEY, who, function(err, data) {
+            if (err) {
+                return;
+            }
+            console.log("score exists %d %d", data, score);
+            if (data > score) {
+                console.log("not a high score for %s %d",who, score);
+                return;
+            } else {
+                console.log("high score for %s %d",who, score);
+                client.zadd(HIGHSCORE_KEY, score, who);
+            }
+        })
     }
 };
+
 
 RedisGameClient.prototype.loadScores = function(callback) {
     client.zrevrangebyscore(HIGHSCORE_KEY, '+inf', '-inf', 'withscores', 'limit', 0, 100, function(err, data) {
