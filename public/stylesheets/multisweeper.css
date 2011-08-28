@@ -142,6 +142,7 @@ html {
 }
 
 .players {
+    margin-top: 30px;
     margin-bottom: 10px;
     height: 50px;
     list-style: none;
