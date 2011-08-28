@@ -94,7 +94,6 @@ MineSweeper.prototype.revealTile = function(x,y,first) {
           console.log("explicit click on bomb");
           //explicit click on bomb
           this.board[x][y] = MineSweeper.BOMB_REVEALED;
-          this.display();
       }
       return false;
     }

@@ -2,7 +2,7 @@
     var templates = new multisweeper.Templates();
     templates.preload();
 
-    function message(playerName, message) {
+    function msg(playerName, message) {
         if (typeof message === "undefined") {
             message = playerName;
             playerName = null;
@@ -19,7 +19,7 @@
 
     function log(playerName, message) {
         if (document.cookie && document.cookie.match(/bacon/)) {
-            message(playerName, message);
+            msg(playerName, message);
         }
     };
 
@@ -34,7 +34,7 @@
     var Utils = multisweeper.Utils = {
         "templates" : templates,
         "log" : log,
-        "message": message,
+        "message": msg,
         "showModal" : showModal
     };
 })(window.multisweeper = window.multisweeper || {}, jQuery);

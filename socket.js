@@ -125,7 +125,6 @@ module.exports = function(app) {
                 if (!game.board.started) {
                     return;
                 }
-                game.board.display();
                 game.board.toggleFlag(data.x,data.y);
                 gameClient.updateGame(game, function(err, updatedGame) {
                     console.log("broadcasting new game state");
@@ -161,7 +160,6 @@ module.exports = function(app) {
                 if (!game.board.started) {
                     return;
                 }
-                game.board.display();
                 var points = game.board.revealed;
                 var outcome = game.board.revealTile(data.x,data.y, true);
                 points = game.board.revealed - points;
@@ -176,7 +174,6 @@ module.exports = function(app) {
                     socket.broadcast.to(game.gameId).emit("mine-hit", data);
                     console.log("Hit a mine at %s,%s",data.x,data.y);
                 }
-                game.board.display();
 
                 gameClient.updateGame(game, function(err, updatedGame) {
                     console.log("broadcasting new game state");
