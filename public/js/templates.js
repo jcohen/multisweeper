@@ -49,6 +49,26 @@
         return css;
     });
 
+    Handlebars.registerHelper("nthIfy", function(value) {
+        var coerced = "" + value;
+        switch (coerced) {
+            case "1" :
+                return "1st";
+            case "2" :
+                return "2nd";
+            case "3" :
+                return "3rd";
+            default:
+                return value + "th";
+        }
+    });
+
+    Handlebars.registerHelper("isCurrent", function(context, thisPlayer, block) {
+        if (thisPlayer === context.currentPlayer) {
+            return " current"
+        }
+    });
+
     var loadedTemplates = {};
 
     var Templates = multisweeper.Templates = function() {

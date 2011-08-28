@@ -108,7 +108,6 @@
 
     function refresh(data) {
         templates.get("board", function(template) {
-            console.log("data.players is: %j", data.players);
             $("#main").empty().html(template({uuid: data.gameId, board: data.board, players: data.players, active: data.active}));
         })
         $(".truncate").textTruncate();
@@ -117,7 +116,28 @@
     function finishGame(data) {
         data.players.sort(byScore);
         templates.get("gameover", function(template) {
-            $(".gameover").html(template({players: data.players}));
+            var cookie = JSON.parse($.cookie("multisweeper"));
+            var currentPlayer = "asd"; //cookie.player.playerName;
+            var myScore;
+            var myPlace;
+
+            for (var i = 0, l = data.players.length; i < l; i++) {
+                var player = data.players[i];
+
+                if (player.playerName === currentPlayer) {
+                    myScore = player.score;
+                    myPlace = (i + 1);
+                    break;
+                }
+            }
+
+            $(".gameover").html(template({
+                currentPlayer: currentPlayer,
+                players: data.players,
+                myScore: myScore,
+                myPlace: myPlace,
+                totalPlayers: data.players.length
+            }));
         })
         $(".overlay").show();
         $(".gameover").show();
