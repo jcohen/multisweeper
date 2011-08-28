@@ -74,7 +74,7 @@
     Templates.prototype.preload = function() {
         if (this.preloaded) { return; }
 
-        var templates = [ "board", "game", "gameover", "modal" ];
+        var templates = [ "board", "game", "gameover", "modal", "message" ];
 
         for (var i = 0, l = templates.length; i < l; i++) {
             var template = templates[i];

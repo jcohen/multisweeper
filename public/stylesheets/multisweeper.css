@@ -270,6 +270,10 @@ html {
     color: #E6F2F6;
 }
 
+.social div#log b {
+    font-weight: bolder;
+}
+
 .social div:not("#log") {
     font-size: 16px;
     background: #468599;

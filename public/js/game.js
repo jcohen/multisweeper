@@ -21,7 +21,7 @@
         this.socket.on("game-assignment", function(data) {
             $(".social").show();
             that.state = data;
-            util.log("Got game assignment: <b>" + data.gameId + "</b>");
+            util.log("Got game assignment: " + data.gameId);
 
             var cookie = {
                 "gameId" : data.gameId,
@@ -41,22 +41,22 @@
             that.socket.on("player-left", playerLeft);
 
             that.socket.on("mine-hit", function(data) {
-                util.message("<b>" + data.playerName + "</b> hit a bomb!");
+                util.message(data.playerName, "hit a bomb!");
             });
 
             that.socket.on("end-game", function(data) {
-                util.message("<b>" + data.playerName + "</b> finished the board!");
+                util.message(data.playerName, "finished the board!");
                 finishGame(data);
             });
 
             that.socket.on("game-start", function(data) {
-               $(".board").show();
-               $(".waiting").hide();
-               util.message("<b>Game Started!</b>");
+                $(".board").show();
+                $(".waiting").hide();
+                util.message("Game Started!");
             });
 
             that.socket.on("chat", function(data) {
-               util.message("<b>" + data.playerName + ":</b>" + data.message);
+                util.message(data.playerName + ":", data.message);
             });
 
             that.socket.on("move-made", function(data) {
@@ -129,12 +129,12 @@
     }
 
     function playerJoined(data) {
-        util.message("<b>" + data.player.playerName + "</b> joined the game!");
+        util.message(data.player.playerName, "joined the game!");
         refresh(data);
     }
 
     function playerLeft(data) {
-        util.message("<b>" + data.player.playerName + "</b> left the game.");
+        util.message(data.player.playerName, "left the game.");
         refresh(data);
     }
 
