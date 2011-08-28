@@ -63,13 +63,24 @@
         })
     }
 
+    $(".cell").live('contextmenu', function(e) {
+        if (e.which === 3) {
+            e.preventDefault();
+            var $this = $(this);
+            id = $this.closest(".board").data('board-id');
+            x = $this.closest(".row").data('row-id');
+            y = $this.data('col-id');
+
+            game.flag(id,x,y);
+        }
+    });
+
     $(".cell").live('click', function(e) {
         var $this = $(this);
         id = $this.closest(".board").data('board-id');
         x = $this.closest(".row").data('row-id');
         y = $this.data('col-id');
 
-        console.log("Click: " + x + "," + y);
         if (e.shiftKey) {
             game.flag(id,x,y);
         } else {
