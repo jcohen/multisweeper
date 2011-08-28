@@ -10,6 +10,7 @@
 </ul>
 
 <div class="clear"></div>
+
 <div data-board-id="{{uuid}}" class="board {{active}}">
   {{#index board}}
   <div data-row-id="{{idx}}" class="row">
@@ -21,10 +22,11 @@
   </div>
   {{/index}}
 </div>
-</div>
+
+<div id="gameControls"><input type="button" value="Leave Game" id="leaveGame"" /"></div>
+
 <div class="waiting {{active}}">Wait for more players, or <input class="start" value="Start Game" type="button"></input></div>
 <div class="clear"></div>
-
 
 <div class="gameover hidden"></div>
 <br/>

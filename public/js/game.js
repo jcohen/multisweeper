@@ -37,6 +37,9 @@
             that.active = data.active;
 
             that.socket.on("new-player", playerJoined);
+
+            that.socket.on("player-left", playerLeft);
+
             that.socket.on("mine-hit", function(data) {
                 util.message("<b>" + data.playerName + "</b> hit a bomb!");
             });
@@ -79,8 +82,12 @@
         this.socket.emit("rejoin", { "playerName" : this.playerName, "gameId" : this.gameId });
     };
 
-    Game.prototype.initializeOnGameAssignment = function() {
+    Game.prototype.leave = function(callback) {
+        this.socket.emit("leave", { "playerName" : this.playerName, "gameId" : this.gameId });
 
+        this.socket.on("left-game", function(data) {
+            callback(data);
+        });
     };
 
     Game.prototype.takeTurn = function(board, x, y) {
@@ -101,6 +108,7 @@
 
     function refresh(data) {
         templates.get("board", function(template) {
+            console.log("data.players is: %j", data.players);
             $("#main").empty().html(template({uuid: data.gameId, board: data.board, players: data.players, active: data.active}));
         })
         $(".truncate").textTruncate();
@@ -122,6 +130,11 @@
 
     function playerJoined(data) {
         util.message("<b>" + data.player.playerName + "</b> joined the game!");
+        refresh(data);
+    }
+
+    function playerLeft(data) {
+        util.message("<b>" + data.player.playerName + "</b> left the game.");
         refresh(data);
     }
 

@@ -294,6 +294,34 @@ RedisGameClient.prototype.reactivatePlayerInGame = function(playerName, game, ca
     }
 };
 
+RedisGameClient.prototype.removePlayerFromGame = function(playerName, game, callback) {
+    console.log("Trying to remove player: %s from game: %s", playerName, game.gameId);
+
+    var playerFound = false;
+    for (var i = 0, l = game.players.length; i < l; i++) {
+        var player = game.players[i];
+        console.log("Player at index %d is: %j", i, player);
+
+        if (player.playerName === playerName) {
+            playerFound = true;
+            game.players.splice(i, 1);
+
+            this.updateGame(game, function(err, updatedGame) {
+                if (err) {
+                    return callback(err, null);
+                }
+
+                return callback(null, { "game" : updatedGame, "player" : player });
+            });
+            break;
+        }
+    }
+
+    if (!playerFound) {
+        return callback({ "error" : "player-not-found"}, null);
+    }
+};
+
 RedisGameClient.prototype.getAvailableGame = function(callback) {
     console.log("Getting available game...");
     var that = this;
