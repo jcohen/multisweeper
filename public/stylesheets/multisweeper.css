@@ -121,6 +121,15 @@ html {
     background: #cda075;
 }
 
+.help-overlay {
+    font-family: classic-robot;
+    font-size: 22px;
+}
+
+.help-overlay .details {
+    font-size: 18px;
+}
+
 .playerWrapper {
 
 }
