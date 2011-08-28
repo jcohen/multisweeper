@@ -117,7 +117,7 @@
         data.players.sort(byScore);
         templates.get("gameover", function(template) {
             var cookie = JSON.parse($.cookie("multisweeper"));
-            var currentPlayer = "asd"; //cookie.player.playerName;
+            var currentPlayer = cookie.player.playerName;
             var myScore;
             var myPlace;
 
