@@ -7,10 +7,12 @@
 
   <br />
   {{#if games}}
-  {{players}} players blew themselves up with {{bombs}} bombs over {{games}} games.
+  <span class="stats">
+    <b>{{players}}</b> players have blown themselves up with <b>{{bombs}}</b> bombs over <b>{{games}}</b> games.
+  </span>
   {{/if}}
 
-  <br />  <br />
-
-  <a href="/credits">Credits</a>
+  <div id="play">
+    <p>Wake up you lazy robot!</p> <a href="/game">Play Game</a>
+  </div>
 </div>
