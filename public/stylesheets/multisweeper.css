@@ -92,6 +92,8 @@ html {
     background: #d8e7ec;
     border: 1px solid #468599;
     font-size: 24px;
+    float: left;
+    margin-right: 10px;
 }
 
 .players {
@@ -431,7 +433,9 @@ html {
     padding: 5px 5px;
     height: 20px;
 }
-
+.waiting {
+    margin-bottom: 10px;
+}
 .waiting.active {
     display: none;
 }
