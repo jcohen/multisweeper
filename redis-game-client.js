@@ -12,6 +12,7 @@ var HIGHSCORE_KEY = "scores";
 var LOCK_KEY = "lock";
 var TOTAL_GAMES = "total_games";
 var TOTAL_PLAYERS = "total_players";
+var TOTAL_BOMBS = "total_bombs";
 
 var DEFAULT_LOCK_EXPIRATION = 100; // 100 ms
 var LOCK_ACQUISITION_INTERVAL = 1; // 1 ms
@@ -392,6 +393,15 @@ RedisGameClient.prototype.loadScores = function(callback) {
     });
 }
 
+RedisGameClient.prototype.stat = function(which) {
+    //Very short whitelist for now.. ;)
+    console.log("bomb up %s %s", which, TOTAL_BOMBS);
+    if (which === TOTAL_BOMBS) {
+        console.log("actually bombing");
+        client.incr(TOTAL_BOMBS);
+    }
+}
+
 RedisGameClient.prototype.stats = function(callback) {
     client.get(TOTAL_GAMES, function(err, data) {
         if (err) {
@@ -402,14 +412,23 @@ RedisGameClient.prototype.stats = function(callback) {
             games = data; 
         }
         client.get(TOTAL_PLAYERS, function(err, data) {
-           if (err) {
-               callback(err);
-           } 
-           var players = 0;
-           if (data) {
-               players = data;  
-           } 
-           callback(null, {"games": games, "players": players});
+            if (err) {
+                callback(err);
+            } 
+            var players = 0;
+            if (data) {
+                players = data;  
+            } 
+            client.get(TOTAL_BOMBS, function(err, data) {
+                if (err) {
+                    callback(err);
+                } 
+                var bombs = 0;
+                if (data) {
+                    bombs = data;  
+                } 
+                callback(null, {"games": games, "players": players, "bombs": bombs});
+          });
         });
     });
 }

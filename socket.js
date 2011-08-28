@@ -169,6 +169,7 @@ module.exports = function(app) {
                 data.players = game.players;
                 console.log("Points: %s", points);
                 if (!outcome) {
+                    gameClient.stat("total_bombs");
                     adjustScore(game.players, data.playerName, MineSweeper.BOMB_PENALTY);
                     data.players = game.players;
                     socket.emit("mine-hit", data);

@@ -10,13 +10,16 @@ module.exports = function(app) {
                 console.log("error getting stats" + err);
                 games = 0;
                 players = 0;
+                bombs = 0;
             } else {
                 games = data.games;
                 players = data.players;
+                bombs = data.bombs;
             }
             res.render('index', {
                 title: 'Multisweeper',
                 games: games,
+                bombs: bombs,
                 players: players
             });
         })
