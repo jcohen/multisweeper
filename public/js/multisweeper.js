@@ -1,9 +1,15 @@
 (function(multisweeper, $) {
     var game;
-    var templates = new multisweeper.Templates();
-    templates.preload();
+    var util = multisweeper.Utils;
 
     $("#joinGame").click(function() {
+        var name = $("#name").val();
+
+        if (!name) {
+            util.showModal("Name is required", "You don't want to make the multisweeper bot angry. He's got a ROOM full of mines!");
+            return;
+        }
+
         game = new multisweeper.Game($("#name").val());
         game.join(showGame);
     });
@@ -26,7 +32,7 @@
     });
 
     function showGame() {
-        templates.get("board", function(template) {
+        util.templates.get("board", function(template) {
             $("#main").empty().html(template({uuid: game.gameId, board: game.state, players: game.players}));
         })
     }

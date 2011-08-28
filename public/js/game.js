@@ -3,10 +3,8 @@
         this.playerName = playerName;
     };
 
-    var util = new multisweeper.Utils();
-
-    var templates = new multisweeper.Templates();
-    templates.preload();
+    var util = multisweeper.Utils;
+    var templates = util.templates;
 
     Game.prototype.join = function(callback) {
         var that = this;
@@ -71,11 +69,7 @@
     }
 
     function nameInUse(data) {
-        templates.get("modal", function(template) {
-            $(".modal").html(template({ "title" : "Name in use", "message" : "Oh no! Someone's already using that name! What are the odds of that?" }));
-            $(".overlay").show();
-            $(".modal").show();
-        });
+        util.showModal("Name in use", "Oh no! Someone's already using that name! What are the odds of that?");
     }
 
     function playerJoined(data) {
