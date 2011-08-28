@@ -16,7 +16,7 @@ html {
 
 #content h1 {
     font-size: 64px;
-    font-family: classic-robot;
+    font-family: classic-robot, Helvetica;
     font-weight: bold;
 }
 
