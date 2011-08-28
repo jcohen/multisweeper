@@ -10,6 +10,9 @@ var GAMES_KEY = "games";
 var FILLING_GAME_ID_KEY = "filling-game-id";
 var HIGHSCORE_KEY = "scores";
 var LOCK_KEY = "lock";
+var TOTAL_GAMES = "total_games";
+var TOTAL_PLAYERS = "total_players";
+
 var DEFAULT_LOCK_EXPIRATION = 100; // 100 ms
 var LOCK_ACQUISITION_INTERVAL = 1; // 1 ms
 var LOCK_ACQUISITION_TIMEOUT = 200; // 200 ms
@@ -137,6 +140,8 @@ RedisGameClient.prototype.createGame = function(callback) {
 
     console.log("Created new game: %j", game);
 
+    client.incr(TOTAL_GAMES);
+
     this.updateGame(game, callback);
 };
 
@@ -251,6 +256,7 @@ RedisGameClient.prototype.addPlayerToGame = function(game, playerName, callback)
             var player = { "playerName" : playerName, "color" : color, "score" : 0 };
             latestGame.players.push(player);
 
+            client.incr(TOTAL_PLAYERS);
             console.log("Players after push: %j", latestGame.players);
 
             that.updateGame(latestGame, function(err, updatedGame) {
@@ -383,5 +389,27 @@ RedisGameClient.prototype.loadScores = function(callback) {
             callback(err);
         }
         callback(null, data);
+    });
+}
+
+RedisGameClient.prototype.stats = function(callback) {
+    client.get(TOTAL_GAMES, function(err, data) {
+        if (err) {
+            callback(err);
+        }
+        var games = 0;
+        if (data) {
+            games = data; 
+        }
+        client.get(TOTAL_PLAYERS, function(err, data) {
+           if (err) {
+               callback(err);
+           } 
+           var players = 0;
+           if (data) {
+               players = data;  
+           } 
+           callback(null, {"games": games, "players": players});
+        });
     });
 }

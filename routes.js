@@ -2,9 +2,24 @@ var RedisGameClient = require("./redis-game-client");
 
 module.exports = function(app) {
     app.get('/', function(req, res){
-        res.render('index', {
-            title: 'Multisweeper'
-        });
+        var gameClient = new RedisGameClient();
+        gameClient.stats(function(err, data) {
+            var games;
+            var players;
+            if (err) {
+                console.log("error getting stats" + err);
+                games = 0;
+                players = 0;
+            } else {
+                games = data.games;
+                players = data.players;
+            }
+            res.render('index', {
+                title: 'Multisweeper',
+                games: games,
+                players: players
+            });
+        })
     });
 
     app.get("/game", function(req, res) {
