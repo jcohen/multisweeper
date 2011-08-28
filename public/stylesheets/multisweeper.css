@@ -76,6 +76,7 @@ html {
     margin-top: 10%;
 }
 
+
 #main form {
     text-align: right;
     margin-left: 40%;
@@ -92,7 +93,6 @@ html {
     background: #d8e7ec;
     border: 1px solid #468599;
     font-size: 24px;
-    float: left;
     margin-right: 10px;
 }
 
@@ -442,6 +442,11 @@ html {
     padding: 5px 5px;
     height: 20px;
 }
+
+#gameControls  input[type="button"] {
+    float: left;
+}
+
 .waiting {
     margin-bottom: 10px;
 }

@@ -8,8 +8,9 @@
             playerName = null;
         }
         templates.get("message", function(template) {
+            var d = new Date();
             $("#log").append(template({
-                "time" : new Date().getTime(),
+                "time" : d.getHours() + ":" + d.getMinutes() +":" + d.getSeconds(),
                 "playerName" : playerName,
                 "message" : message
             }));
