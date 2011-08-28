@@ -255,6 +255,16 @@
     padding-right: 15px;
 }
 
+#log {
+    height: 200px;
+    width: 600px;
+    overflow: auto;
+    border: 1px solid #008cda;
+}
+#chat {
+    width: 550px;
+}
+
 .waiting.active {
     display: none;
 }

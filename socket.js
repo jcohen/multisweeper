@@ -42,6 +42,16 @@ module.exports = function(app) {
             });
         });
         
+        socket.on("chat", function(data) {
+            gameClient.getGame(data.game, function(err, game) {
+                if (err) {
+                    return;
+                }
+                socket.emit("chat", data);
+                socket.broadcast.to(game.id).emit("chat", data);
+            });
+        });
+        
         socket.on("start", function beginGame(data) {
             gameClient.getGame(data.game, function(err, game) {
                 if (err) {

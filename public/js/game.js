@@ -15,6 +15,7 @@
         this.socket.on("name-in-use", nameInUse);
 
         this.socket.on("game-assignment", function(data) {
+            $(".social").show();
             that.state = data;
             util.log("Got game assignment: <b>" + data.gameId + "</b>");
             util.log("Game state is: " + JSON.stringify(data));
@@ -37,6 +38,9 @@
                $(".board").show(); 
                $(".waiting").hide();
                util.message("<b>Game Started!</b>");
+            });
+            that.socket.on("chat", function(data) {
+               util.message("<b>"+data.playerName+":</b>"+data.message); 
             });
             that.socket.on("move-made", function(data) {
                 util.log("Game state is: " + JSON.stringify(data));
@@ -62,6 +66,10 @@
     Game.prototype.start = function(board) {
         this.socket.emit("start", {game: this.gameId});
     };
+
+    Game.prototype.chat = function(message) {
+        this.socket.emit("chat", {game: this.gameId, "playerName" : this.playerName, "message": message});
+    }
 
     function refresh(data) {
         templates.get("board", function(template) {

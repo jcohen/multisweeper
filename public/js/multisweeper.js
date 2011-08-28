@@ -22,6 +22,14 @@
         }
     });
     
+    $("#chat").keypress(function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            game.chat($("#chat").val());
+            $("#chat").val('');
+        }
+    });
+    
     $(".start").live('click', function() {
        game.start(); 
     });
