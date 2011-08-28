@@ -45,6 +45,12 @@ module.exports = function(app) {
         });
     });
 
+    app.get("/credits", function(req, res) {
+        res.render("credits", {
+            "title" : "Credits"
+        });
+    });
+
     app.get("/nom", function(req, res) {
        res.cookie('bacon', 'nomnom');
        res.end('OK\n');
