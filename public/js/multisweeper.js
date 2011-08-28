@@ -43,6 +43,11 @@
         $(".modal").hide();
     });
 
+    $(".help").live('click', function() {
+        $(".overlay").show();
+        $(".help-overlay").show();
+    });
+
     function showGame() {
         util.templates.get("board", function(template) {
             $("#main").empty().html(template({uuid: game.gameId, board: game.state, players: game.players, active: game.active}));

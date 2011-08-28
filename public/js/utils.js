@@ -16,12 +16,12 @@
 
     function showModal(title, message) {
         this.templates.get("modal", function(template) {
-            $(".modal").html(template({ "title" : title, "message" : message }));
+            $("#modal").html(template({ "title" : title, "message" : message }));
             $(".overlay").show();
-            $(".modal").show();
+            $("#modal").show();
         });
     };
-
+    
     var Utils = multisweeper.Utils = {
         "templates" : templates,
         "log" : log,

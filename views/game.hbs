@@ -5,13 +5,35 @@
     <input type="text" id="name" name="name" placeholder="What is your name, human?" />
     <input type="button" id="joinGame" value="Join Game" />
   </form>
-</div>
 
+</div>
 <div class="social hidden">
 Messages
 <div id="log">
 </div>
 Chat: <input id="chat"></input>
+</div>
+
+<div class="modal help-overlay hidden">
+    <div class="content">
+    <h2>Objective</h2>
+    Explore the playfield while avoiding clicking on mines.
+    <br/>
+    <br/>
+    <h2>Flags</h2>
+    SHIFT-CLICK a tile to mark it with a flag
+    <br/>
+    <br/>
+    <h2>Scoring</h2>
+    <div class="clear"></div>
+    <br/>
+    Each tile revealed: <span class="right">1 point</span>
+    <br/>
+    Each bomb triggered: <span class="right">-5 points</span>
+    </div>
+
+    <div class="button dismiss">OK</div>
+    <div class="clear"></div>
 </div>
 
 <script src="/js/handlebars.1.0.0.beta.3.js"></script>
