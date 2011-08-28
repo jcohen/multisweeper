@@ -61,6 +61,7 @@
         util.templates.get("board", function(template) {
             $("#main").empty().html(template({uuid: game.gameId, board: game.state, players: game.players, active: game.active}));
         })
+        $(".truncate").textTruncate();
     }
 
     $(".cell").live('contextmenu', function(e) {

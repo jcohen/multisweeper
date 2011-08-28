@@ -103,6 +103,7 @@
         templates.get("board", function(template) {
             $("#main").empty().html(template({uuid: data.gameId, board: data.board, players: data.players, active: data.active}));
         })
+        $(".truncate").textTruncate();
     };
 
     function finishGame(data) {
