@@ -21,7 +21,7 @@ module.exports = function(app) {
                     var updatedGame = data.game;
                     var player = data.player;
 
-                    socket.join(updatedGame.id);
+                    socket.join(updatedGame.gameId);
 
                     socket.emit("game-assignment", {
                         "gameId" : updatedGame.gameId,
@@ -31,7 +31,7 @@ module.exports = function(app) {
                         "active": updatedGame.board.started ? 'active' : 'inactive'
                     });
 
-                    socket.broadcast.to(updatedGame.id).emit("new-player", {
+                    socket.broadcast.to(updatedGame.gameId).emit("new-player", {
                         "gameId" : updatedGame.gameId,
                         "players" : updatedGame.players,
                         "board": updatedGame.board.state(),
@@ -41,17 +41,17 @@ module.exports = function(app) {
                 });
             });
         });
-        
+
         socket.on("chat", function(data) {
             gameClient.getGame(data.game, function(err, game) {
                 if (err) {
                     return;
                 }
                 socket.emit("chat", data);
-                socket.broadcast.to(game.id).emit("chat", data);
+                socket.broadcast.to(game.gameId).emit("chat", data);
             });
         });
-        
+
         socket.on("start", function beginGame(data) {
             gameClient.getGame(data.game, function(err, game) {
                 if (err) {
@@ -63,9 +63,9 @@ module.exports = function(app) {
 
                     data.board = updatedGame.board.state();
                     data.players = updatedGame.players;
-                    
+
                     socket.emit("game-start", data);
-                    socket.broadcast.to(game.id).emit("game-start", data);
+                    socket.broadcast.to(game.gameId).emit("game-start", data);
                 });
             });
         });
@@ -86,14 +86,14 @@ module.exports = function(app) {
                     data.board = updatedGame.board.state();
                     data.players = updatedGame.players;
                     data.active = updatedGame.board.started ? 'active' : 'inactive'
-                    
+
                     socket.emit("move-made", data);
-                    socket.broadcast.to(game.id).emit("move-made", data);
+                    socket.broadcast.to(game.gameId).emit("move-made", data);
 
                     if (game.board.over(game)) {
                         gameClient.endGame(game, function (err) {
                             socket.emit("end-game", data);
-                            socket.broadcast.to(game.id).emit("end-game", data);
+                            socket.broadcast.to(game.gameId).emit("end-game", data);
                             gameClient.postScores(game.players, function(err) {
                                 if (err) {
                                     console.log("Error:" + err);
@@ -125,7 +125,7 @@ module.exports = function(app) {
                     adjustScore(game.players, data.playerName, MineSweeper.BOMB_PENALTY);
                     data.players = game.players;
                     socket.emit("mine-hit", data);
-                    socket.broadcast.to(game.id).emit("mine-hit", data);
+                    socket.broadcast.to(game.gameId).emit("mine-hit", data);
                     console.log("Hit a mine at %s,%s",data.x,data.y);
                 }
                 game.board.display();
@@ -136,12 +136,12 @@ module.exports = function(app) {
                     data.board = updatedGame.board.state();
                     data.active = updatedGame.board.started ? 'active' : 'inactive'
                     socket.emit("move-made", data);
-                    socket.broadcast.to(game.id).emit("move-made", data);
+                    socket.broadcast.to(game.gameId).emit("move-made", data);
 
                     if (game.board.over(game)) {
                         gameClient.endGame(game, function (err) {
                             socket.emit("end-game", data);
-                            socket.broadcast.to(game.id).emit("end-game", data);
+                            socket.broadcast.to(game.gameId).emit("end-game", data);
                             gameClient.postScores(game.players, function(err) {
                                 if (err) {
                                     console.log("Error:" + err);

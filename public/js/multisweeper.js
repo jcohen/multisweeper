@@ -2,6 +2,14 @@
     var game;
     var util = multisweeper.Utils;
 
+    var cookie = $.cookie("multisweeper");
+
+    if (cookie) {
+        var hydratedCookie = JSON.parse(cookie);
+
+        game = new multisweeper.Game(hydratedCookie)
+    }
+
     $("#joinGame").click(function() {
         var name = $("#name").val();
 
@@ -21,7 +29,7 @@
             $("#joinGame").click();
         }
     });
-    
+
     $("#chat").keypress(function(event) {
         if (event.keyCode === 13) {
             event.preventDefault();
@@ -29,11 +37,11 @@
             $("#chat").val('');
         }
     });
-    
+
     $(".start").live('click', function() {
-       game.start(); 
+       game.start();
     });
-    
+
     $(".done").live('click', function() {
        window.location.href="/game";
     });
