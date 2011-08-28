@@ -297,16 +297,20 @@ html {
     z-index: 1;
 }
 
+.gameover {
+    font-family: classic-robot;
+}
+
 .gameover h2, .modal h2 {
     text-align: center;
     margin-top: 0px;
 }
 
 .gameover, .modal {
+    border: 5px solid #62a16a;
+    background: #d8e7ec;
     z-index: 2;
     width: 500px;
-    border: 3px solid #008CDA;
-    background: #ffffff;
     padding: 5px;
     font-size: 20px;
     position:absolute;
@@ -317,7 +321,7 @@ html {
 
 .gameover .button, .modal .button {
     float: right;
-    background: #008CDA;
+    background: #62a16a;
     color: #ffffff;
     font-size: 14px;
     padding: 3px 10px;
@@ -343,11 +347,11 @@ html {
 
 .gameover .footnote {
     margin-left: 15px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .gameover a {
-    color: #008CDA;
+    color: #62a16a;
 }
 .gameover .score {
     float: right;
