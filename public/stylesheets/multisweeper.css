@@ -213,6 +213,39 @@
     float: right;
 }
 
+.hall h1 {
+    text-align: center;
+}
+
+.hall .preamble {
+    font-size: 14px;
+    margin:auto;
+    width: 430px;
+}
+.hall .beat {
+    float: right;
+}
+.hall .preamble a {
+    color: #008CDA;
+}
+.highscores {
+    border: 5px solid #008CDA;
+    margin: auto;
+    width: 400px;
+    background: #a5a5a5;
+    padding:15px;
+    font-size: 16px;
+    line-height: 28px;
+}
+
+.entry {
+    padding-left: 15px;
+}
+.score {
+    float: right;
+    padding-right: 15px;
+}
+
 .hidden {
     display: none;
 }

@@ -1,8 +1,22 @@
-<a href="/game">&#0171; Back to games</a>
-<div class="highscores">
-{{#scores}}
-  <div class="entry">
-  {{name}}: {{score}}
-  </div>
-{{/scores}}
+<div class="hall">
+<h1>MultiSweeper Hall of Fame</h1>
+<div class="preamble">
+The best of the best...
+<span class="beat">
+Think you can <a href="/game">beat</a> these scores?
+</span>
 </div>
+<div class="highscores">
+{{#index scores}}
+  <div class="entry">
+  {{inc idx}}. {{name}} <span class="score">{{score}}</score>
+  </div>
+  <div class="clear"></div>
+{{/index}}
+</div>
+</div>
+
+<script>
+    $(".entry:odd").css("background-color", "#ffffff");
+    $(".entry:even").css("background-color", "#e5e5e5");
+</script>

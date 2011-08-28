@@ -50,6 +50,9 @@ Handlebars.registerHelper("index", function(array, fn, elseFn) {
     return elseFn();
   }
 });
+Handlebars.registerHelper("inc", function(val, fn, elseFn) {
+    return val + 1;
+});
 
 // Listen
 
