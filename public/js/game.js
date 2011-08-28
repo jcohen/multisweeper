@@ -18,7 +18,14 @@
             $(".social").show();
             that.state = data;
             util.log("Got game assignment: <b>" + data.gameId + "</b>");
-            util.log("Game state is: " + JSON.stringify(data));
+            // util.log("Game state is: " + JSON.stringify(data));
+
+            var cookie = {
+                "gameId" : data.gameId,
+                "player" : data.player
+            };
+
+            $.cookie("multisweeper", JSON.stringify(cookie));
 
             that.gameId = data.gameId;
             that.state = data.board;
@@ -30,24 +37,28 @@
             that.socket.on("mine-hit", function(data) {
                 util.message("<b>" + data.playerName + "</b> hit a bomb!");
             });
+
             that.socket.on("end-game", function(data) {
                 util.message("<b>" + data.playerName + "</b> finished the board!");
                 finishGame(data);
             });
+
             that.socket.on("game-start", function(data) {
-               $(".board").show(); 
+               $(".board").show();
                $(".waiting").hide();
                util.message("<b>Game Started!</b>");
             });
+
             that.socket.on("chat", function(data) {
-               util.message("<b>"+data.playerName+":</b>"+data.message); 
+               util.message("<b>" + data.playerName + ":</b>" + data.message);
             });
+
             that.socket.on("move-made", function(data) {
-                util.log("Game state is: " + JSON.stringify(data));
+                // util.log("Game state is: " + JSON.stringify(data));
 
                 that.state = data.board;
                 that.players = data.players;
-                util.log("<b>" + data.playerName + "</b> made a move: <b>" + data.x + "," + data.y + "</b> in game: <b>" + data.game + "</b>");
+                // util.log("<b>" + data.playerName + "</b> made a move: <b>" + data.x + "," + data.y + "</b> in game: <b>" + data.game + "</b>");
                 refresh(data);
             });
 
@@ -62,7 +73,7 @@
     Game.prototype.flag = function(board, x, y) {
         this.socket.emit("flag", { "game" : this.gameId, "playerName" : this.playerName, "time" : new Date().getTime(), "x": x, "y": y });
     };
-    
+
     Game.prototype.start = function(board) {
         this.socket.emit("start", {game: this.gameId});
     };
@@ -91,7 +102,7 @@
     }
 
     function playerJoined(data) {
-        util.log("<b>" + data.player.playerName + "</b> joined the game!");
+        util.message("<b>" + data.player.playerName + "</b> joined the game!");
         refresh(data);
     }
 

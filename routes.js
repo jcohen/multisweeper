@@ -12,7 +12,7 @@ module.exports = function(app) {
             "title" : "Multisweeper"
         });
     });
-    
+
     app.get("/scores", function(req, res) {
         var gameClient = new RedisGameClient();
         gameClient.loadScores(function (err, data) {
@@ -26,7 +26,7 @@ module.exports = function(app) {
             res.render("scores", {'scores': results});
         });
     });
-    
+
     app.get("/nom", function(req, res) {
        res.cookie('bacon', 'nomnom');
        res.end('OK\n');
