@@ -123,7 +123,6 @@
 
             for (var i = 0, l = data.players.length; i < l; i++) {
                 var player = data.players[i];
-
                 if (player.playerName === currentPlayer) {
                     myScore = player.score;
                     myPlace = (i + 1);
