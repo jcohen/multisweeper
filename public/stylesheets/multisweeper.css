@@ -254,7 +254,16 @@
     padding-right: 15px;
 }
 
+.waiting.active {
+    display: none;
+}
+.waiting.inactive {
+    display: block;
+}
 .hidden {
+    display: none;
+}
+.inactive {
     display: none;
 }
 .clear {

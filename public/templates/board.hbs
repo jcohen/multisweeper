@@ -7,7 +7,7 @@
 </ul>
 
 <div class="clear"></div>
-<div data-board-id="{{uuid}}" class="board">
+<div data-board-id="{{uuid}}" class="board {{active}}">
 {{#index board}}
   <div data-row-id="{{idx}}" class="row">
     {{#index line}}
@@ -18,7 +18,7 @@
   </div>
 {{/index}}
 </div>
-
+<div class="waiting {{active}}">Wait for more players, or <input class="start" value="Start Game" type="button"></input></div>
 <div class="clear"></div>
 
 <div class="overlay hidden"></div>

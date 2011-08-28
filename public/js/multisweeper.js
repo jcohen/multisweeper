@@ -16,13 +16,17 @@
         }
     });
     
+    $(".start").live('click', function() {
+       game.start(); 
+    });
+    
     $(".done").live('click', function() {
        window.location.href="/game"; 
     });
 
     function showGame() {
         templates.get("board", function(template) {
-            $("#main").empty().html(template({uuid: game.gameId, board: game.state, players: game.players}));
+            $("#main").empty().html(template({uuid: game.gameId, board: game.state, players: game.players, active: game.active}));
         })
     }
 

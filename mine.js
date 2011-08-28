@@ -7,11 +7,13 @@ var MineSweeper = exports.MineSweeper = function(model) {
     this.height = model.height;
     this.board = model.board;
     this.revealed = model.revealed;
+    this.started = model.started;
   } else {
     this.uuid = uuid();
     this.width = 10;
     this.height = 10;
     this.revealed = 0;
+    this.started = false;
     this.board = new Array(this.height);
     for (i=0;i<this.height;i++) {
       this.board[i] = new Array(this.width);
@@ -26,6 +28,10 @@ var MineSweeper = exports.MineSweeper = function(model) {
     }
   }
 };
+
+MineSweeper.prototype.startGame = function() {
+    this.started = true;
+}
 
 MineSweeper.prototype.placeMine = function(x, y) {
   if (this.board[x][y] != MineSweeper.BOMB) {
