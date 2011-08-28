@@ -171,6 +171,7 @@ html {
 }
 
 .revealed {
+    background: #aaa;
     font-family: helvetica;
     font-weight: bold;
     cursor: auto;
