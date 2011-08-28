@@ -368,6 +368,7 @@ html {
 .gameover h2, .modal h2 {
     text-align: center;
     margin-top: 0px;
+    margin-bottom: 10px;
 }
 
 .gameover, .modal {
@@ -391,6 +392,7 @@ html {
     padding: 3px 10px;
     margin-right: 15px;
     height: 15px;
+    cursor: pointer;
 }
 
 .gameover .content, .modal .content {
