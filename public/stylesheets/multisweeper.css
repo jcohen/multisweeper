@@ -14,10 +14,19 @@ html {
     margin-left: 40%;
 }
 
+#content.credits {
+    margin-left: 25%
+}
+
 #content h1 {
     font-size: 64px;
     font-family: classic-robot, Helvetica;
     font-weight: bold;
+}
+
+#content h3 {
+    font-size: 24px;
+    color: #AB6654;
 }
 
 #content a {
@@ -33,6 +42,23 @@ html {
 
 #content p {
     font-size: 24px;
+}
+
+#content p.smaller, #content p.smaller a {
+    font-size: 18px;
+}
+
+#content ul {
+    margin-top: 35px;
+    margin-bottom: 35px;
+}
+
+#content li, #content li a {
+    font-size: 20px;
+}
+
+#content ul.smaller li, #content ul.smaller li a{
+    font-size: 18px;
 }
 
 #main, .social {
