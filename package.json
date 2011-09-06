@@ -15,7 +15,7 @@
       "hbs": "0.0.7",
       "redis": "0.6.7",
       "node-uuid": "1.2.0",
-      "socket.io" : "0.7.11"
+      "socket.io" : "0.8.3"
   },
   "engines": {
     "node": "0.4.11"
