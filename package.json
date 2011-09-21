@@ -9,7 +9,6 @@
     "lib": "lib"
   },
   "dependencies": {
-      "nko": "*",
       "express": "2.4.6",
       "handlebars" : "1.0.2beta",
       "hbs": "0.0.7",
